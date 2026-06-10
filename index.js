@@ -200,7 +200,7 @@
   controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
   controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
   controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
-  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,  'zoom', -velocity, friction), true);
+  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,   'zoom', -velocity, friction), true);
   controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement, 'zoom',  velocity, friction), true);
 
   function sanitize(s) {
@@ -326,6 +326,12 @@
 
     var iconWrapper = document.createElement('div');
     iconWrapper.classList.add('info-hotspot-icon-wrapper');
+    
+    // NATIVE HOVER TOOLTIP: Pulls dynamic station names out of your data arrays
+    if (hotspot.title) {
+      iconWrapper.setAttribute('title', hotspot.title);
+    }
+
     var icon = document.createElement('img');
     icon.src = 'img/info.png';
     icon.classList.add('info-hotspot-icon');
@@ -341,7 +347,7 @@
       var closeBtn = document.getElementById('close-modal');
 
       if (modal) {
-        // Issue 2 Fix: Safely inject text values from data.js parameters
+        // Safely inject text values from data.js parameters
         if (modalTitle) modalTitle.innerHTML = hotspot.title || "Station Information";
         if (modalText) modalText.innerHTML = hotspot.text || "";
         
@@ -354,7 +360,7 @@
         // Display the modal block layout container
         modal.style.display = 'flex';
 
-        // Issue 1 Fix: Explicitly link dynamic modal teardown triggers
+        // Explicitly link dynamic modal teardown triggers
         if (closeBtn) {
           closeBtn.onclick = function() {
             modal.style.display = 'none';
