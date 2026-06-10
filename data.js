@@ -24,8 +24,8 @@ var APP_DATA = {
         {
           "yaw": 2.918,
           "pitch": 0.1,
-          "title": "Station 1 Information",
-          "text": "Welcome to Station 1. This is the entry overview point of the lab setup.",
+          "title": "Station 1: Internet of Things (IoT)",
+          "text": "Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.",
           "video": "2IVgKpI4xuU"
         }
       ]
@@ -74,8 +74,8 @@ var APP_DATA = {
         {
           "yaw": 2.807,
           "pitch": 0.1,
-          "title": "Station 2 Information",
-          "text": "Details and processing metrics for Station 2 are managed here.",
+          "title": "Station 2: Libiao Robotics",
+          "text": "Uses autonomous sorting robots to move and sort parcels efficiently. Increases throughput while reducing manual handling and labour requirements.",
           "video": "A1MJwjR3avk"
         }
       ]
@@ -123,8 +123,8 @@ var APP_DATA = {
         {
           "yaw": 2.639,
           "pitch": -0.1,
-          "title": "Station 3 Information",
-          "text": "Overview of operations and standard protocols at Station 3.",
+          "title": "Station 3: Linde",
+          "text": "Provides advanced material handling solutions, including forklifts and warehouse automation. Enhances safety, productivity, and operational efficiency in logistics environments.",
           "video": "iFvlGe506KA"
         }
       ]
@@ -153,8 +153,8 @@ var APP_DATA = {
         {
           "yaw": 2.801,
           "pitch": 0.0,
-          "title": "Station 4 Information",
-          "text": "Inventory logistics and scanning workflow monitored at Station 4.",
+          "title": "Station 4: 4-Way Shuttle (ICAS Technology)",
+          "text": "An automated storage and retrieval system that moves inventory in multiple directions. Maximises storage density and enables fast, flexible warehouse operations.",
           "video": "nC7-9PYJ1Tk"
         }
       ]
@@ -183,9 +183,9 @@ var APP_DATA = {
         {
           "yaw": 2.830,
           "pitch": 0.2,
-          "title": "Station 5 Information",
-          "text": "Quality assurance checking area configuration parameters.",
-          "video": "wjfRAZUnonI"
+          "title": "Station 5: LEAN",
+          "text": "A methodology focused on eliminating waste and continuously improving processes. Helps organisations increase efficiency, quality, and customer value.",
+          "video": "wjfRAZUnonl"
         }
       ]
     },
@@ -232,8 +232,8 @@ var APP_DATA = {
         {
           "yaw": 3.062,
           "pitch": 0.2,
-          "title": "Station 6 Information",
-          "text": "Final integration loop system prior to central hub delivery.",
+          "title": "Station 6: AppSheet Scanner",
+          "text": "A mobile scanning solution built with AppSheet for digital inventory tracking. Enables real-time data capture, reducing manual paperwork and errors.",
           "video": "HOELR0LFNIM"
         }
       ]
@@ -296,9 +296,9 @@ var APP_DATA = {
         {
           "yaw": 0.023278412192304643,
           "pitch": 0.1354448748955086,
-          "title": "Nexus Collaboration Hub",
-          "text": "Republic Polytechnic launches Supply Chain Nexus to advance logistics innovation and industry collaboration. Click below to view detailed operational workflows.",
-          "video": "2IVgKpI4xuU" 
+          "title": "Station 7: Nexus",
+          "text": "A digital platform that centralises operational data and workflows. Provides better visibility, collaboration, and control across business processes.",
+          "video": "OYbPOhK0wPo" 
         }
       ]
     }
