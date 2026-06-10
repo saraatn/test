@@ -25,7 +25,8 @@ var APP_DATA = {
           "yaw": 2.918,
           "pitch": 0.1,
           "title": "Station 1 Information",
-          "text": "Welcome to Station 1. This is the entry overview point of the lab setup."
+          "text": "Welcome to Station 1. This is the entry overview point of the lab setup.",
+          "video": "2IVgKpI4xuU"
         }
       ]
     },
@@ -74,7 +75,8 @@ var APP_DATA = {
           "yaw": 2.807,
           "pitch": 0.1,
           "title": "Station 2 Information",
-          "text": "Details and processing metrics for Station 2 are managed here."
+          "text": "Details and processing metrics for Station 2 are managed here.",
+          "video": "A1MJwjR3avk"
         }
       ]
     },
@@ -122,7 +124,8 @@ var APP_DATA = {
           "yaw": 2.639,
           "pitch": -0.1,
           "title": "Station 3 Information",
-          "text": "Overview of operations and standard protocols at Station 3."
+          "text": "Overview of operations and standard protocols at Station 3.",
+          "video": "iFvlGe506KA"
         }
       ]
     },
@@ -151,7 +154,8 @@ var APP_DATA = {
           "yaw": 2.801,
           "pitch": 0.0,
           "title": "Station 4 Information",
-          "text": "Inventory logistics and scanning workflow monitored at Station 4."
+          "text": "Inventory logistics and scanning workflow monitored at Station 4.",
+          "video": "nC7-9PYJ1Tk"
         }
       ]
     },
@@ -180,7 +184,8 @@ var APP_DATA = {
           "yaw": 2.830,
           "pitch": 0.2,
           "title": "Station 5 Information",
-          "text": "Quality assurance checking area configuration parameters."
+          "text": "Quality assurance checking area configuration parameters.",
+          "video": "wjfRAZUnonI"
         }
       ]
     },
@@ -228,7 +233,8 @@ var APP_DATA = {
           "yaw": 3.062,
           "pitch": 0.2,
           "title": "Station 6 Information",
-          "text": "Final integration loop system prior to central hub delivery."
+          "text": "Final integration loop system prior to central hub delivery.",
+          "video": "HOELR0LFNIM"
         }
       ]
     },
@@ -290,8 +296,9 @@ var APP_DATA = {
         {
           "yaw": 0.023278412192304643,
           "pitch": 0.1354448748955086,
-          "title": "Nexus",
-          "text": "https://www.rp.edu.sg/news/highlights/rp-launches-supply-chain-nexus-to-advance-logistics-innovation-and-industry-collaboration/"
+          "title": "Nexus Collaboration Hub",
+          "text": "Republic Polytechnic launches Supply Chain Nexus to advance logistics innovation and industry collaboration. Click below to view detailed operational workflows.",
+          "video": "2IVgKpI4xuU" 
         }
       ]
     }
