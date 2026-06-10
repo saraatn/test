@@ -141,27 +141,6 @@
     document.body.classList.add('fullscreen-disabled');
   }
 
-  // ==========================================================================
-  // UNIFIED WIDGET CLOSE CONTROLLER
-  // ==========================================================================
-  var modal = document.getElementById('video-modal');
-  var closeBtn = document.getElementById('close-modal');
-  var iframe = document.getElementById('youtube-player');
-
-  if (closeBtn && modal && iframe) {
-    closeBtn.addEventListener('click', function() {
-      modal.style.display = 'none';
-      iframe.src = ''; // Strips audio instantly
-    });
-
-    modal.addEventListener('click', function(event) {
-      if (event.target === modal) {
-        modal.style.display = 'none';
-        iframe.src = ''; 
-      }
-    });
-  }
-
   // Set handler for scene list toggle.
   sceneListToggleElement.addEventListener('click', toggleSceneList);
 
@@ -353,24 +332,42 @@
     iconWrapper.appendChild(icon);
     wrapper.appendChild(iconWrapper);
 
-    // HIJACK MARZIPANO CLICK: Fire the beautiful custom stacked widget window
+    // DYNAMIC CLICK HANDLER: Injects data models and structures runtime closing hooks smoothly
     iconWrapper.addEventListener('click', function() {
       var modal = document.getElementById('video-modal');
       var modalTitle = document.querySelector('#video-modal h2');
       var modalText = document.querySelector('#video-modal p');
       var modalIframe = document.getElementById('youtube-player');
+      var closeBtn = document.getElementById('close-modal');
 
       if (modal) {
-        if (modalTitle) modalTitle.innerHTML = hotspot.title;
-        if (modalText) modalText.innerHTML = hotspot.text;
+        // Issue 2 Fix: Safely inject text values from data.js parameters
+        if (modalTitle) modalTitle.innerHTML = hotspot.title || "Station Information";
+        if (modalText) modalText.innerHTML = hotspot.text || "";
         
-        // Dynamically assign YouTube ID from data.js if it exists
-        if (modalIframe && hotspot.video) {
-          modalIframe.src = "https://www.youtube.com/embed/" + hotspot.video + "?enablejsapi=1&autoplay=1";
-        } else if (modalIframe) {
-          modalIframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1&autoplay=1";
+        // Dynamic YouTube Video Injection
+        if (modalIframe) {
+          var videoId = hotspot.video || "dQw4w9WgXcQ"; 
+          modalIframe.src = "https://www.youtube.com/embed/" + videoId + "?enablejsapi=1&autoplay=1";
         }
+        
+        // Display the modal block layout container
         modal.style.display = 'flex';
+
+        // Issue 1 Fix: Explicitly link dynamic modal teardown triggers
+        if (closeBtn) {
+          closeBtn.onclick = function() {
+            modal.style.display = 'none';
+            if (modalIframe) modalIframe.src = ''; // Instantly strips audio processing streams
+          };
+        }
+
+        modal.onclick = function(event) {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+            if (modalIframe) modalIframe.src = ''; // Instantly strips audio processing streams
+          }
+        };
       }
     });
 
