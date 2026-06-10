@@ -32,7 +32,7 @@ var APP_DATA = {
     },
     {
       "id": "1-",
-      "name": "",
+      "name": "Transition 4",  // <-- CHANGED FROM "" TO "Transition 4"
       "levels": [
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
         { "tileSize": 512, "size": 512 }
@@ -240,7 +240,7 @@ var APP_DATA = {
     },
     {
       "id": "9-6-7",
-      "name": "Transition 4", 
+      "name": "Transition 5",  // <-- CHANGED FROM "Transition 4" TO "Transition 5"
       "levels": [
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
         { "tileSize": 512, "size": 512 }
@@ -259,7 +259,7 @@ var APP_DATA = {
     },
     {
       "id": "10-",
-      "name": "Transition 5", 
+      "name": "Transition 6",  // <-- CHANGED FROM "Transition 4" TO "Transition 6"
       "levels": [
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
         { "tileSize": 512, "size": 512 }
