@@ -74,9 +74,9 @@ var APP_DATA = {
         {
           "yaw": 2.807,
           "pitch": 0.1,
-          "title": "Station 2: Libiao Robotics",
-          "text": "Uses autonomous sorting robots to move and sort parcels efficiently. Increases throughput while reducing manual handling and labour requirements.",
-          "video": "A1MJwjR3avk"
+          "title": "Station 2: Sorting Robots (Libiao Robotics)",
+          "text": "Uses autonomous sorting robots to move and sort parcels efficiently.<br><br>Increases throughput while reducing manual handling and labour requirements.",
+          "video": "AKXPny0ubsc"
         }
       ]
     },
@@ -123,9 +123,9 @@ var APP_DATA = {
         {
           "yaw": 2.639,
           "pitch": -0.1,
-          "title": "Station 3: Linde",
-          "text": "Provides advanced material handling solutions, including forklifts and warehouse automation. Enhances safety, productivity, and operational efficiency in logistics environments.",
-          "video": "iFvlGe506KA"
+          "title": "Station 3: Automated Reach Truck (Linde)",
+          "text": "Provides advanced material handling solutions, including forklifts and warehouse automation.<br><br>Enhances safety, productivity, and operational efficiency in logistics environments.",
+          "video": "6xEJnABdkBo"
         }
       ]
     },
