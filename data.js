@@ -185,7 +185,7 @@ var APP_DATA = {
           "pitch": 0.2,
           "title": "Station 5: LEAN",
           "text": "A methodology focused on eliminating waste and continuously improving processes.<br><br>Helps organisations increase efficiency, quality, and customer value.",
-          "video": "UnNPdXImmZY"
+          "video": "s2HCrhNVfak"
         }
       ]
     },
