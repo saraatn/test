@@ -7,62 +7,101 @@
 <style> @-ms-viewport { width: device-width; } </style>
 <link rel="stylesheet" href="vendor/reset.min.css">
 <link rel="stylesheet" href="style.css">
+
+<style>
+  /* Top Progress Bar Styling */
+  #progress-bar-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 2000;
+  }
+  #progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #33ff33;
+    box-shadow: 0 0 8px #33ff33;
+    transition: width 0.4s ease;
+  }
+
+  /* Floorplan Container Styling */
+  #floorplan-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 360px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 5px;
+    border-radius: 8px;
+    border: 2px solid #fff;
+  }
+
+  #floorplan-img {
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+  }
+
+  .map-dot {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: #ff3333;
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    transform: translate(-50%, -50%); 
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    z-index: 1010;
+  }
+
+  .map-dot:hover {
+    background-color: #33ff33;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+</style>
 </head>
-<body class="multiple-scenes ">
+<body class="multiple-scenes">
+
+<div id="progress-bar-container">
+  <div id="progress-bar"></div>
+</div>
 
 <div id="pano"></div>
 
+<div id="floorplan-container">
+  <img src="img/floorplan.png" id="floorplan-img" alt="Lab Map">
+  
+  <button class="map-dot" data-scene="0-go-to-station-1" style="top: 80%; left: 70%;" title="Go to Station 1"></button>
+  <button class="map-dot" data-scene="2-go-to-station-2" style="top: 80%; left: 55%;" title="Go to Station 2"></button>
+  <button class="map-dot" data-scene="4-go-to-station-3" style="top: 80%; left: 30%;" title="Go to Station 3"></button>
+  <button class="map-dot" data-scene="5-go-to-station-4" style="top: 80%; left: 15%;" title="Go to Station 4"></button>
+  <button class="map-dot" data-scene="6-go-to-station-5" style="top: 30%; left: 15%;" title="Go to Station 5"></button>
+  <button class="map-dot" data-scene="8-go-to-station-6" style="top: 30%; left: 55%;" title="Go to Station 6"></button>
+  <button class="map-dot" data-scene="11-nexus" style="top: 30%; left: 80%;" title="Nexus"></button>
+</div>
+
 <div id="sceneList">
   <ul class="scenes">
-    
-      <a href="javascript:void(0)" class="scene" data-id="0-go-to-station-1">
-        <li class="text">Go To Station 1</li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="1-">
-        <li class="text"></li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="2-go-to-station-2">
-        <li class="text">Go To Station 2</li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="3-">
-        <li class="text"></li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="4-go-to-station-3">
-        <li class="text">Go To Station 3</li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="5-go-to-station-4">
-        <li class="text">Go To Station 4</li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="6-go-to-station-5">
-        <li class="text">Go To Station 5</li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="7-">
-        <li class="text"></li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="8-go-to-station-6">
-        <li class="text">Go To Station 6</li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="9-6-7">
-        <li class="text">6-7</li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="10-">
-        <li class="text"></li>
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="11-nexus">
-        <li class="text">Nexus</li>
-      </a>
-    
+    <a href="javascript:void(0)" class="scene" data-id="0-go-to-station-1"><li class="text">Go To Station 1</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="1-"><li class="text">Transition 1</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="2-go-to-station-2"><li class="text">Go To Station 2</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="3-"><li class="text">Transition 2</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="4-go-to-station-3"><li class="text">Go To Station 3</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="5-go-to-station-4"><li class="text">Go To Station 4</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="6-go-to-station-5"><li class="text">Go To Station 5</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="7-"><li class="text">Transition 3</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="8-go-to-station-6"><li class="text">Go To Station 6</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="9-6-7"><li class="text">6-7</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="10-"><li class="text">Transition 4</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="11-nexus"><li class="text">Nexus</li></a>
   </ul>
 </div>
 
@@ -85,24 +124,12 @@
   <img class="icon on" src="img/collapse.png">
 </a>
 
-<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
-  <img class="icon" src="img/up.png">
-</a>
-<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2">
-  <img class="icon" src="img/down.png">
-</a>
-<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3">
-  <img class="icon" src="img/left.png">
-</a>
-<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4">
-  <img class="icon" src="img/right.png">
-</a>
-<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5">
-  <img class="icon" src="img/plus.png">
-</a>
-<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6">
-  <img class="icon" src="img/minus.png">
-</a>
+<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1"><img class="icon" src="img/up.png"></a>
+<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2"><img class="icon" src="img/down.png"></a>
+<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3"><img class="icon" src="img/left.png"></a>
+<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4"><img class="icon" src="img/right.png"></a>
+<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5"><img class="icon" src="img/plus.png"></a>
+<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6"><img class="icon" src="img/minus.png"></a>
 
 <script src="vendor/screenfull.min.js" ></script>
 <script src="vendor/bowser.min.js" ></script>
@@ -110,6 +137,10 @@
 
 <script src="data.js"></script>
 <script src="index.js"></script>
+
+<script>
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+</script>
 
 </body>
 </html>
