@@ -68,7 +68,7 @@
   }
 
   /* ========================================== */
-  /* WELCOME OVERLAY & FORM STYLING    */
+  /* WELCOME OVERLAY, LOGOS & VIDEO STYLING     */
   /* ========================================== */
   #welcome-overlay {
     position: fixed;
@@ -76,7 +76,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
     z-index: 9999999; 
     display: flex;
     flex-direction: column;
@@ -87,7 +86,42 @@
     box-sizing: border-box;
     transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 1;
-    overflow-y: auto; /* Handles smaller screens seamlessly */
+    overflow-y: auto;
+    background: #0f172a; /* Fallback */
+  }
+
+  /* Ambient moving video background container */
+  .video-background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  .video-background-container iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* 16:9 ratio */
+    min-height: 100vh;
+    min-width: 177.77vh; /* 1200 / 675 */
+    transform: translate(-50%, -50%);
+  }
+
+  /* Dark tint matrix over the video to keep form legible */
+  .video-overlay-tint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(30, 27, 75, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+    z-index: -1;
   }
 
   .overlay-header {
@@ -100,19 +134,13 @@
     box-sizing: border-box;
   }
 
-  .brand-left {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #818cf8;
-    font-weight: 700;
-  }
-
-  .brand-right {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #94a3b8;
+  /* Logo Image Layout adjustments */
+  .logo-img {
+    height: 45px; /* Adjust height based on your real logo file specs */
+    width: auto;
+    object-fit: contain;
+    /* Optional filter to make logos crisp white on dark backdrop if needed: */
+    /* filter: brightness(0) invert(1); */
   }
 
   .overlay-main {
@@ -122,8 +150,9 @@
     text-align: center;
     padding: 20px 16px;
     width: 100%;
-    max-width: 500px;
+    max-width: 520px;
     box-sizing: border-box;
+    z-index: 10;
   }
 
   .overlay-title {
@@ -134,36 +163,40 @@
     background: linear-gradient(to right, #ffffff, #cbd5e1, #a5b4fc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
 
   @media (max-width: 768px) {
     .overlay-title { font-size: 2.5rem; }
+    .logo-img { height: 35px; }
   }
 
   .overlay-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: #c7d2fe;
-    font-weight: 300;
+    font-weight: 400;
     margin: 0 0 24px 0;
     line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
 
-  /* Form Container Design */
   .registration-form {
     width: 100%;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 24px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 28px;
     border-radius: 16px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     text-align: left;
     box-sizing: border-box;
     margin-bottom: 24px;
   }
 
   .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .form-group:last-of-type {
@@ -176,15 +209,15 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #94a3b8;
+    color: #cbd5e1;
     margin-bottom: 6px;
   }
 
   .form-input {
     width: 100%;
     padding: 12px 14px;
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     color: #ffffff;
     font-size: 1rem;
@@ -194,9 +227,9 @@
 
   .form-input:focus {
     outline: none;
-    border-color: #6366f1;
-    background: rgba(30, 41, 59, 0.9);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    border-color: #818cf8;
+    background: rgba(30, 41, 59, 0.95);
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
   }
 
   .enter-tour-btn {
@@ -221,18 +254,15 @@
     box-shadow: 0 12px 25px -5px rgba(79, 70, 229, 0.5);
   }
 
-  .enter-tour-btn:active {
-    transform: translateY(0);
-  }
-
   .overlay-footer {
     width: 100%;
     text-align: center;
     padding: 24px;
     font-size: 11px;
-    color: #64748b;
+    color: #94a3b8;
     letter-spacing: 0.05em;
     box-sizing: border-box;
+    z-index: 10;
   }
 
   .fade-out {
@@ -243,16 +273,32 @@
 </head>
 <body class="multiple-scenes">
 
+<!-- ========================================== -->
+<!--     LITES GUEST WELCOME & REGISTRATION     -->
+<!-- ========================================== -->
 <div id="welcome-overlay">
+    
+    <!-- Moving Video Snippet Background Layer -->
+    <div class="video-background-container">
+        <!-- 
+          Note: change 'XT7098mCxpE' inside the link below to your specific YouTube snippet ID 
+          It runs on continuous muted loops, hiding branding controls for premium appearance.
+        -->
+        <iframe src="https://www.youtube.com/embed/XT7098mCxpE?autoplay=1&mute=1&loop=1&playlist=XT7098mCxpE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div class="video-overlay-tint"></div>
+
+    <!-- Header Section with Graphic Brand Logos -->
     <div class="overlay-header">
-        <div class="brand-left">Republic Polytechnic</div>
-        <div class="brand-right">COI-SCM</div>
+        <img src="img/rp-logo.png" alt="Republic Polytechnic" class="logo-img" onerror="this.style.display='none'; this.after('Republic Polytechnic')">
+        <img src="img/coi-scm-logo.png" alt="COI-SCM" class="logo-img" onerror="this.style.display='none'; this.after('COI-SCM')">
     </div>
 
     <div class="overlay-main">
         <h1 class="overlay-title">LITES 2026</h1>
-        <p class="overlay-subtitle">Virtual Lab Tour Sign-In</p>
+        <p class="overlay-subtitle">virtual supply chain lab tour registration</p>
         
+        <!-- The Guest Registration Form -->
         <form class="registration-form" onsubmit="handleFormSubmit(event)">
             <div class="form-group">
                 <label class="form-label" for="guest-name">Participant Name</label>
@@ -270,7 +316,7 @@
             </div>
             
             <button type="submit" id="enter-btn" class="enter-tour-btn">
-                Submit & Enter Tour
+                Submit & Enter Experience
             </button>
         </form>
     </div>
@@ -281,6 +327,9 @@
 </div>
 
 
+<!-- ========================================== -->
+<!--         ORIGINAL SIMULATOR INTERFACE       -->
+<!-- ========================================== -->
 <div id="progress-bar-container">
   <div id="progress-bar"></div>
 </div>
@@ -382,23 +431,22 @@
   </div>
 </div>
 
+<!-- ========================================== -->
+<!--         FORM PROCESSING & DISMISS ROUTINE  -->
+<!-- ========================================== -->
 <script>
   function handleFormSubmit(event) {
-      event.preventDefault(); // Prevents page reload
+      event.preventDefault(); 
       
-      // Grabbing the input values
       const participantName = document.getElementById('guest-name').value;
       const organisationName = document.getElementById('guest-org').value;
       const designation = document.getElementById('guest-designation').value;
 
-      // Log to console for local testing right now
       console.log("Guest Checked In:", { participantName, organisationName, designation });
 
-      // Trigger the fade-out transition
       const overlay = document.getElementById('welcome-overlay');
       overlay.classList.add('fade-out');
       
-      // Clean up the DOM element completely after transition ends
       setTimeout(() => {
           overlay.remove();
       }, 600);
