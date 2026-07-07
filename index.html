@@ -8,8 +8,6 @@
 <link rel="stylesheet" href="vendor/reset.min.css">
 <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.tailwindcss.com"></script>
-
 <style>
   /* Top Progress Bar Styling */
   #progress-bar-container {
@@ -69,42 +67,217 @@
     transform: translate(-50%, -50%) scale(1.3);
   }
 
-  /* Overlay smooth fade animation */
+  /* ========================================== */
+  /* WELCOME OVERLAY & FORM STYLING    */
+  /* ========================================== */
+  #welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+    z-index: 9999999; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    font-family: system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    overflow-y: auto; /* Handles smaller screens seamlessly */
+  }
+
+  .overlay-header {
+    width: 100%;
+    max-width: 1200px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .brand-left {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #818cf8;
+    font-weight: 700;
+  }
+
+  .brand-right {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #94a3b8;
+  }
+
+  .overlay-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 16px;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+  }
+
+  .overlay-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin: 0 0 8px 0;
+    background: linear-gradient(to right, #ffffff, #cbd5e1, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (max-width: 768px) {
+    .overlay-title { font-size: 2.5rem; }
+  }
+
+  .overlay-subtitle {
+    font-size: 1.1rem;
+    color: #c7d2fe;
+    font-weight: 300;
+    margin: 0 0 24px 0;
+    line-height: 1.4;
+  }
+
+  /* Form Container Design */
+  .registration-form {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 24px;
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-bottom: 6px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: rgba(30, 41, 59, 0.9);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  .enter-tour-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(to right, #4f46e5, #2563eb);
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.025em;
+    box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+    transition: all 0.2s ease;
+    margin-top: 8px;
+  }
+
+  .enter-tour-btn:hover {
+    background: linear-gradient(to right, #6366f1, #3b82f6);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 25px -5px rgba(79, 70, 229, 0.5);
+  }
+
+  .enter-tour-btn:active {
+    transform: translateY(0);
+  }
+
+  .overlay-footer {
+    width: 100%;
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    box-sizing: border-box;
+  }
+
   .fade-out {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.8s ease-out;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 </style>
 </head>
 <body class="multiple-scenes">
 
-<div id="welcome-overlay" class="fixed inset-0 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 z-[999999] flex flex-col justify-between items-center text-white font-sans transition-opacity duration-700">
-    
-    <header class="w-full max-w-6xl p-6 flex justify-between items-center">
-        <div class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Republic Polytechnic</div>
-        <div class="text-xs uppercase tracking-widest text-slate-400">COI-SCM</div>
-    </header>
+<div id="welcome-overlay">
+    <div class="overlay-header">
+        <div class="brand-left">Republic Polytechnic</div>
+        <div class="brand-right">COI-SCM</div>
+    </div>
 
-    <main class="flex flex-col items-center text-center px-4 max-w-2xl">
-        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-indigo-300 mb-4">
-            LITES 2026
-        </h1>
-        <p class="text-lg md:text-xl text-indigo-200 font-light mb-8 max-w-md">
-            Supply Chain Management Solutions Showcase & Virtual Lab Tour
-        </p>
+    <div class="overlay-main">
+        <h1 class="overlay-title">LITES 2026</h1>
+        <p class="overlay-subtitle">Virtual Lab Tour Sign-In</p>
+        
+        <form class="registration-form" onsubmit="handleFormSubmit(event)">
+            <div class="form-group">
+                <label class="form-label" for="guest-name">Participant Name</label>
+                <input type="text" id="guest-name" class="form-input" placeholder="e.g., Julian Siew" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="guest-org">Organisation Name</label>
+                <input type="text" id="guest-org" class="form-input" placeholder="e.g., EEZEE PTE. LTD." required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="guest-designation">Designation</label>
+                <input type="text" id="guest-designation" class="form-input" placeholder="e.g., Co-Founder" required>
+            </div>
+            
+            <button type="submit" id="enter-btn" class="enter-tour-btn">
+                Submit & Enter Tour
+            </button>
+        </form>
+    </div>
 
-        <button 
-            id="enter-btn"
-            onclick="dismissOverlay()"
-            class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-lg tracking-wide">
-            Enter the Experience
-        </button>
-    </main>
-
-    <footer class="w-full text-center p-6 text-xs text-slate-500 tracking-wide">
+    <div class="overlay-footer">
         &copy; 2026 Republic Polytechnic Centre of Innovation for Supply Chain Management. All rights reserved.
-    </footer>
+    </div>
 </div>
 
 
@@ -210,15 +383,25 @@
 </div>
 
 <script>
-  // Fades and clears screen layer instantly upon click
-  function dismissOverlay() {
+  function handleFormSubmit(event) {
+      event.preventDefault(); // Prevents page reload
+      
+      // Grabbing the input values
+      const participantName = document.getElementById('guest-name').value;
+      const organisationName = document.getElementById('guest-org').value;
+      const designation = document.getElementById('guest-designation').value;
+
+      // Log to console for local testing right now
+      console.log("Guest Checked In:", { participantName, organisationName, designation });
+
+      // Trigger the fade-out transition
       const overlay = document.getElementById('welcome-overlay');
       overlay.classList.add('fade-out');
       
-      // Completely remove it from DOM layout after the transition finishes
+      // Clean up the DOM element completely after transition ends
       setTimeout(() => {
           overlay.remove();
-      }, 800);
+      }, 600);
   }
 </script>
   
