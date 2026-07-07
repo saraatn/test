@@ -103,7 +103,7 @@
     z-index: -2;
   }
 
-  /* Clean neutral tech gradient overlay */
+  /* Clean neutral tech gradient overlay (No purplish blue tint) */
   .video-overlay-tint {
     position: absolute;
     top: 0;
@@ -179,8 +179,8 @@
     color: #ffffff;
     animation: 
       typing 2.2s steps(22, end) forwards,
-      blinkCursor 0.6s step-end 4 alternate; 
-    animation-delay: 0.8s; 
+      blinkCursor 0.6s step-end 4 alternate; /* Blinks cursor during execution then collapses it */
+    animation-delay: 0.8s; /* Commences right after the header container fades in */
   }
 
   @keyframes typing {
@@ -201,7 +201,7 @@
 
   .overlay-subtitle {
     font-size: 1.15rem;
-    color: #4ade80; 
+    color: #4ade80; /* Branded COI-SCM Green Colour */
     font-weight: 600;
     margin: 0 0 24px 0;
     line-height: 1.4;
@@ -297,145 +297,12 @@
     opacity: 0 !important;
     pointer-events: none !important;
   }
-
-  /* ========================================== */
-  /* NETWORKING MODAL & BOOTH STYLING RULES     */
-  /* ========================================== */
-  #networking-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999998;
-    background: rgba(10, 10, 11, 0.96);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: system-ui, -apple-system, sans-serif;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  .networking-container {
-    background: #18181b;
-    border: 1px solid rgba(255,255,255,0.1);
-    max-width: 650px;
-    width: 100%;
-    border-radius: 20px;
-    padding: 36px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-    text-align: center;
-  }
-
-  .networking-title {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin-bottom: 8px;
-  }
-
-  .networking-recommendation-tag {
-    background: rgba(74, 222, 128, 0.1);
-    border: 1px dashed #4ade80;
-    color: #4ade80;
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    margin: 18px 0 24px 0;
-    display: inline-block;
-  }
-
-  .booth-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .booth-btn {
-    background: #27272a;
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 16px 20px;
-    border-radius: 12px;
-    color: #ffffff;
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.2s ease;
-  }
-
-  .booth-btn:hover {
-    background: #3f3f46;
-    transform: translateX(4px);
-  }
-
-  .booth-arrow {
-    color: #a1a1aa;
-    font-size: 1.2rem;
-  }
-
-  @keyframes pulseGlow {
-    0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
-  }
-
-  .recommended-booth-highlight {
-    border: 2px solid #4ade80 !important;
-    animation: pulseGlow 2s infinite;
-  }
-
-  /* ========================================== */
-  /* PREMIUM FOMO TOAST NOTIFICATION            */
-  /* ========================================== */
-  #fomo-toast {
-    position: fixed;
-    bottom: 24px;
-    right: -400px;
-    width: 320px;
-    background: rgba(24, 24, 27, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-left: 4px solid #4ade80;
-    border-radius: 8px;
-    padding: 16px;
-    color: #ffffff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    font-family: system-ui, -apple-system, sans-serif;
-    z-index: 10000000;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  #fomo-toast.show {
-    right: 24px;
-  }
-
-  .toast-icon {
-    font-size: 1.4rem;
-  }
-
-  .toast-content {
-    font-size: 0.85rem;
-    line-height: 1.4;
-    color: #e4e4e7;
-  }
-
-  .toast-content strong {
-    color: #ffffff;
-    font-weight: 600;
-  }
 </style>
 </head>
 <body class="multiple-scenes">
 
 <div id="welcome-overlay">
+    
     <div class="photo-background-container"></div>
     <div class="video-overlay-tint"></div>
 
@@ -468,7 +335,7 @@
                 <input type="text" id="guest-designation" class="form-input" placeholder="e.g., Co-Founder" required>
             </div>
             
-            <button type="submit" class="enter-tour-btn">
+            <button type="submit" id="enter-btn" class="enter-tour-btn">
                 Submit & Enter Experience
             </button>
         </form>
@@ -478,6 +345,7 @@
         &copy; <span id="footer-year"></span> Republic Polytechnic Centre of Innovation for Supply Chain Management. All rights reserved.
     </div>
 </div>
+
 
 <div id="progress-bar-container">
   <div id="progress-bar"></div>
@@ -533,80 +401,59 @@
   <img class="icon on" src="img/collapse.png">
 </a>
 
-<div id="video-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 99999; justify-content: center; align-items: center; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-  <div style="position: relative; width: 90%; max-width: 900px; background-color: #000000; box-shadow: 0px 15px 40px rgba(0,0,0,0.8); overflow: hidden; border: 1px solid #333;">
-    <span id="close-modal" style="position: absolute; top: 15px; right: 20px; color: #ffffff; font-size: 32px; cursor: pointer; font-weight: 300; z-index: 100000; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">&times;</span>
-    <div style="padding: 25px 50px 20px 25px; color: #ffffff; background-color: #111111; border-bottom: 1px solid #222;">
-      <h2 style="margin: 0 0 10px 0; font-size: 22px; font-weight: bold; letter-spacing: 0.5px; color: #ffffff;">Loading Station Title...</h2>
-      <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #cccccc; font-weight: 300;">Loading Station Data...</p>
-    </div>
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; background-color: #000000;">
-      <iframe id="youtube-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-  </div>
-</div>
+<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1"><img class="icon" src="img/up.png"></a>
+<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2"><img class="icon" src="img/down.png"></a>
+<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3"><img class="icon" src="img/left.png"></a>
+<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4"><img class="icon" src="img/right.png"></a>
+<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5"><img class="icon" src="img/plus.png"></a>
+<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6"><img class="icon" src="img/minus.png"></a>
 
-<div id="fomo-toast">
-  <div class="toast-icon">🚀</div>
-  <div class="toast-content" id="fomo-toast-text">Loading event network timeline...</div>
-</div>
+<script src="vendor/screenfull.min.js" ></script>
+<script src="vendor/bowser.min.js" ></script>
+<script src="vendor/marzipano.js" ></script>
 
-<div id="networking-overlay" style="display: none;">
-  <div class="networking-container">
-    <h2 class="networking-title">Tour Complete! 🤝</h2>
-    <p style="color: #a1a1aa; font-size: 1.05rem; line-height: 1.5;">You've successfully explored all learning stations. Welcome to the interactive networking lounge.</p>
-    
-    <div class="networking-recommendation-tag" id="profile-recommendation-box">Calculating recommended pathways...</div>
-
-    <div class="booth-grid">
-      <button class="booth-btn" id="booth-logistics" onclick="selectNetworkingBooth('2-go-to-station-2')">
-        <span>Activation Zone A: Intralogistics & Warehouse Automation</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" id="booth-procurement" onclick="selectNetworkingBooth('4-go-to-station-3')">
-        <span>Activation Zone B: Digital Procurement & Sustainable Sourcing</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" id="booth-management" onclick="selectNetworkingBooth('0-go-to-station-1')">
-        <span>Activation Zone C: Supply Chain Risk Management Operations</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" id="booth-nexus" onclick="selectNetworkingBooth('11-nexus')">
-        <span>Activation Zone D: Executive Innovation Strategy Nexus</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" onclick="selectNetworkingBooth('6-go-to-station-5')">
-        <span>Activation Zone E: Open Networking & Partner Showcase Lounge</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-    </div>
-    <p style="font-size: 12px; color: #71717a;">Select a zone layout above to instantly enter and consult with industry expert teams.</p>
-  </div>
-</div>
-
-<script src="vendor/screenfull.min.js"></script>
-<script src="vendor/bowser.min.js"></script>
-<script src="vendor/marzipano.js"></script>
 <script src="data.js"></script>
 <script src="index.js"></script>
 
 <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>
+  
+<div id="video-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 99999; justify-content: center; align-items: center; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+  
+  <div style="position: relative; width: 90%; max-width: 900px; background-color: #000000; box-shadow: 0px 15px 40px rgba(0,0,0,0.8); overflow: hidden; border: 1px solid #333;">
+    
+    <span id="close-modal" style="position: absolute; top: 15px; right: 20px; color: #ffffff; font-size: 32px; cursor: pointer; font-weight: 300; z-index: 100000; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">&times;</span>
+
+    <div style="padding: 25px 50px 20px 25px; color: #ffffff; background-color: #111111; border-bottom: 1px solid #222;">
+      <h2 style="margin: 0 0 10px 0; font-size: 22px; font-weight: bold; letter-spacing: 0.5px; color: #ffffff;">
+        Loading Station Title...
+      </h2>
+      <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #cccccc; font-weight: 300;">
+        Loading Station Data...
+      </p>
+    </div>
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; background-color: #000000;">
+      <iframe 
+        id="youtube-player"
+        src="" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+      </iframe>
+    </div>
+
+  </div>
+</div>
 
 <script>
-  // Tracking infrastructure definitions
-  const standardStations = ['0-go-to-station-1', '2-go-to-station-2', '4-go-to-station-3', '5-go-to-station-4', '6-go-to-station-5', '8-go-to-station-6', '11-nexus'];
-  let visitedStations = new Set();
-  let fomoIntervalId = null;
-
+  // Detects true year to inject into typewriter element and footer copyright dynamically
   document.addEventListener("DOMContentLoaded", function() {
       const currentYear = new Date().getFullYear();
       document.getElementById('dynamic-lites-title').innerText = "Welcome to LITES " + currentYear;
       document.getElementById('footer-year').innerText = currentYear;
-      
-      // Initialize the non-click internal scene watcher
-      initializeMarzipanoTracker();
   });
 
   function handleFormSubmit(event) {
@@ -616,107 +463,19 @@
       const organisationName = document.getElementById('guest-org').value;
       const designation = document.getElementById('guest-designation').value;
 
-      localStorage.setItem('lites_guest_name', participantName);
-      localStorage.setItem('lites_guest_org', organisationName);
-      localStorage.setItem('lites_guest_title', designation);
+      console.log("Guest Checked In:", { participantName, organisationName, designation });
 
       const overlay = document.getElementById('welcome-overlay');
       overlay.classList.add('fade-out');
       
       setTimeout(() => {
           overlay.remove();
-          startLiveFomoSimulation();
       }, 600);
   }
-
-  // Active scene tracker engine loops cleanly behind the scenes
-  function initializeMarzipanoTracker() {
-      setInterval(() => {
-          if (typeof APP !== 'undefined' && APP.currentScene) {
-              trackStationVisit(APP.currentScene.data.id);
-          } else if (typeof viewer !== 'undefined' && viewer.scene()) {
-              trackStationVisit(viewer.scene().data.id);
-          }
-      }, 300);
-  }
-
-  function trackStationVisit(sceneId) {
-      if (standardStations.includes(sceneId) && !visitedStations.has(sceneId)) {
-          visitedStations.add(sceneId);
-          
-          // Once the final standard station is met, wait for 1s for it to display beautifully before shifting focus
-          if (visitedStations.size === standardStations.length) {
-              setTimeout(() => {
-                  triggerNetworkingPhaseOverlay();
-              }, 1000); 
-          }
-      }
-  }
-
-  function triggerNetworkingPhaseOverlay() {
-      const name = localStorage.getItem('lites_guest_name') || 'Guest';
-      const title = (localStorage.getItem('lites_guest_title') || '').toLowerCase();
-      
-      const recTag = document.getElementById('profile-recommendation-box');
-      let targetedButtonId = 'booth-management'; 
-      let recommendationLabel = 'Operations & Risk Control';
-
-      if (title.includes('logistics') || title.includes('warehouse') || title.includes('operation')) {
-          targetedButtonId = 'booth-logistics';
-          recommendationLabel = 'Intralogistics & Warehouse Automation';
-      } else if (title.includes('procurement') || title.includes('buyer') || title.includes('sourcing') || title.includes('supply chain')) {
-          targetedButtonId = 'booth-procurement';
-          recommendationLabel = 'Digital Procurement & Sustainable Sourcing';
-      } else if (title.includes('manager') || title.includes('founder') || title.includes('director') || title.includes('executive') || title.includes('ceo')) {
-          targetedButtonId = 'booth-nexus';
-          recommendationLabel = 'Executive Innovation Strategy Nexus';
-      }
-
-      recTag.innerHTML = `👋 Hi <strong>${name}</strong>, based on your industry profile, we highly recommend starting at <strong>${recommendationLabel}</strong>!`;
-      
-      const targetBtn = document.getElementById(targetedButtonId);
-      if (targetBtn) {
-          targetBtn.classList.add('recommended-booth-highlight');
-      }
-
-      document.getElementById('networking-overlay').style.display = 'flex';
-  }
-
-  function selectNetworkingBooth(sceneId) {
-      document.getElementById('networking-overlay').style.display = 'none';
-      if (typeof switchScene === "function") {
-          switchScene(sceneId);
-      } else {
-          const alternativeTrigger = document.querySelector(`.scene[data-id="${sceneId}"]`);
-          if (alternativeTrigger) alternativeTrigger.click();
-      }
-  }
-
-  function startLiveFomoSimulation() {
-      const activities = [
-          "32 industry peers are currently exploring Warehouse Automation.",
-          "A group discussion on Circular Supply Chains just started in Zone B.",
-          "Procurement specialists from leading logistics firms just entered the Hub.",
-          "142 event attendees have visited the Risk Operations platform today.",
-          "A corporate delegation just checked into the Executive Strategy Nexus.",
-          "45 guests are currently sharing business cards in the Showcase Lounge."
-      ];
-      const icons = ["⚡", "🤝", "📈", "🔥", "🎯", "🤖"];
-
-      fomoIntervalId = setInterval(() => {
-          const randomIndex = Math.floor(Math.random() * activities.length);
-          const toast = document.getElementById('fomo-toast');
-          const toastText = document.getElementById('fomo-toast-text');
-          
-          toast.querySelector('.toast-icon').innerText = icons[randomIndex];
-          toastText.innerHTML = `<strong>Live Update:</strong> ${activities[randomIndex]}`;
-          
-          toast.classList.add('show');
-          setTimeout(() => {
-              toast.classList.remove('show');
-          }, 6000);
-      }, 45000); 
-  }
 </script>
+  
 </body>
 </html>
+
+
+
