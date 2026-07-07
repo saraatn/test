@@ -96,7 +96,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('img/RP COI background.png'); /* Pointing to your asset */
+    background-image: url('img/RP COI background.png'); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -114,13 +114,15 @@
     z-index: -1;
   }
 
+  /* Modified to push both logos side by side to the top right */
   .overlay-header {
     width: 100%;
-    max-width: 1200px;
-    padding: 24px;
+    max-width: 100%;
+    padding: 24px 32px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Aligns items to the right side */
     align-items: center;
+    gap: 20px; /* Space between RP and COI logos */
     box-sizing: border-box;
   }
 
@@ -156,6 +158,7 @@
   @media (max-width: 768px) {
     .overlay-title { font-size: 2.5rem; }
     .logo-img { height: 35px; }
+    .overlay-header { padding: 16px; gap: 12px; }
   }
 
   .overlay-subtitle {
@@ -260,16 +263,11 @@
 </head>
 <body class="multiple-scenes">
 
-<!-- ========================================== -->
-<!--     LITES GUEST WELCOME & REGISTRATION     -->
-<!-- ========================================== -->
 <div id="welcome-overlay">
     
-    <!-- Placeholder Photo Background Layer -->
     <div class="photo-background-container"></div>
     <div class="video-overlay-tint"></div>
 
-    <!-- Header Section with Brand Logos -->
     <div class="overlay-header">
         <img src="img/rp-logo.png" alt="Republic Polytechnic" class="logo-img" onerror="this.style.display='none'; this.after('Republic Polytechnic')">
         <img src="img/coi-scm-logo.png" alt="COI-SCM" class="logo-img" onerror="this.style.display='none'; this.after('COI-SCM')">
@@ -279,7 +277,6 @@
         <h1 class="overlay-title">LITES 2026</h1>
         <p class="overlay-subtitle">virtual supply chain lab tour registration</p>
         
-        <!-- The Guest Registration Form -->
         <form class="registration-form" onsubmit="handleFormSubmit(event)">
             <div class="form-group">
                 <label class="form-label" for="guest-name">Participant Name</label>
@@ -308,9 +305,6 @@
 </div>
 
 
-<!-- ========================================== -->
-<!--         ORIGINAL SIMULATOR INTERFACE       -->
-<!-- ========================================== -->
 <div id="progress-bar-container">
   <div id="progress-bar"></div>
 </div>
@@ -412,9 +406,6 @@
   </div>
 </div>
 
-<!-- ========================================== -->
-<!--         FORM PROCESSING & DISMISS ROUTINE  -->
-<!-- ========================================== -->
 <script>
   function handleFormSubmit(event) {
       event.preventDefault(); 
