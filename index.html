@@ -68,7 +68,7 @@
   }
 
   /* ========================================== */
-  /* WELCOME OVERLAY, LOGOS & VIDEO STYLING     */
+  /* WELCOME OVERLAY, LOGOS & PHOTO STYLING     */
   /* ========================================== */
   #welcome-overlay {
     position: fixed;
@@ -87,33 +87,23 @@
     transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 1;
     overflow-y: auto;
-    background: #0f172a; /* Fallback */
   }
 
-  /* Ambient moving video background container */
-  .video-background-container {
+  /* Temporary Placeholder Photo Background Layer */
+  .photo-background-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    background-image: url('img/RP COI background.jpg'); /* Pointing to your asset */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: -2;
-    pointer-events: none;
   }
 
-  .video-background-container iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100vw;
-    height: 56.25vw; /* 16:9 ratio */
-    min-height: 100vh;
-    min-width: 177.77vh; /* 1200 / 675 */
-    transform: translate(-50%, -50%);
-  }
-
-  /* Dark tint matrix over the video to keep form legible */
+  /* Dark tech gradient tint over the image to guarantee high readability */
   .video-overlay-tint {
     position: absolute;
     top: 0;
@@ -134,13 +124,10 @@
     box-sizing: border-box;
   }
 
-  /* Logo Image Layout adjustments */
   .logo-img {
-    height: 45px; /* Adjust height based on your real logo file specs */
+    height: 45px; 
     width: auto;
     object-fit: contain;
-    /* Optional filter to make logos crisp white on dark backdrop if needed: */
-    /* filter: brightness(0) invert(1); */
   }
 
   .overlay-main {
@@ -278,17 +265,11 @@
 <!-- ========================================== -->
 <div id="welcome-overlay">
     
-    <!-- Moving Video Snippet Background Layer -->
-    <div class="video-background-container">
-        <!-- 
-          Note: change 'XT7098mCxpE' inside the link below to your specific YouTube snippet ID 
-          It runs on continuous muted loops, hiding branding controls for premium appearance.
-        -->
-        <iframe src="https://www.youtube.com/embed/XT7098mCxpE?autoplay=1&mute=1&loop=1&playlist=XT7098mCxpE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
+    <!-- Placeholder Photo Background Layer -->
+    <div class="photo-background-container"></div>
     <div class="video-overlay-tint"></div>
 
-    <!-- Header Section with Graphic Brand Logos -->
+    <!-- Header Section with Brand Logos -->
     <div class="overlay-header">
         <img src="img/rp-logo.png" alt="Republic Polytechnic" class="logo-img" onerror="this.style.display='none'; this.after('Republic Polytechnic')">
         <img src="img/coi-scm-logo.png" alt="COI-SCM" class="logo-img" onerror="this.style.display='none'; this.after('COI-SCM')">
