@@ -2,7 +2,7 @@ var APP_DATA = {
   "scenes": [
     {
       "id": "0-go-to-station-1",
-      "name": "Go To Station 1",
+      "name": "Station 1",
       "youtubeId": "2IVgKpI4xuU",
       "videoYaw": 2.9692191558859236,
       "videoPitch": 0.3344836674719627,
@@ -32,7 +32,7 @@ var APP_DATA = {
     },
     {
       "id": "1-",
-      "name": "Transition 4",  // <-- CHANGED FROM "" TO "Transition 4"
+      "name": "Transition Point",  // <-- CHANGED FROM "" TO "Transition 4"
       "levels": [
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
         { "tileSize": 512, "size": 512 }
@@ -52,7 +52,7 @@ var APP_DATA = {
     },
     {
       "id": "2-go-to-station-2",
-      "name": "Go To Station 2",
+      "name": "Station 2",
       "youtubeId": "A1MJwjR3avk",
       "videoYaw": 2.921632629797138,
       "videoPitch": 0.19916000965580594,
@@ -101,7 +101,7 @@ var APP_DATA = {
     },
     {
       "id": "4-go-to-station-3",
-      "name": "Go To Station 3",
+      "name": "Station 3",
       "youtubeId": "iFvlGe506KA",
       "videoYaw": 2.6454256314907516,
       "videoPitch": -0.14350918546853997,
@@ -131,7 +131,7 @@ var APP_DATA = {
     },
     {
       "id": "5-go-to-station-4",
-      "name": "Go To Station 4",
+      "name": "Station 4",
       "youtubeId": "nC7-9PYJ1Tk",
       "videoYaw": 2.7000766080547853,
       "videoPitch": 0.06175135915825791,
@@ -161,7 +161,7 @@ var APP_DATA = {
     },
     {
       "id": "6-go-to-station-5",
-      "name": "Go To Station 5",
+      "name": "Station 5",
       "youtubeId": "wjfRAZUnonI",
       "videoYaw": 2.7620155776811437,
       "videoPitch": 0.36283380198627313,
@@ -210,7 +210,7 @@ var APP_DATA = {
     },
     {
       "id": "8-go-to-station-6",
-      "name": "Go To Station 6",
+      "name": "Station 6",
       "youtubeId": "HOELR0LFNIM",
       "videoYaw": 2.6287961359912195,
       "videoPitch": 0.3371018128848373,
@@ -240,7 +240,7 @@ var APP_DATA = {
     },
     {
       "id": "9-6-7",
-      "name": "Transition 5",  // <-- CHANGED FROM "Transition 4" TO "Transition 5"
+      "name": "Transition Point", 
       "levels": [
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
         { "tileSize": 512, "size": 512 }
@@ -259,7 +259,7 @@ var APP_DATA = {
     },
     {
       "id": "10-",
-      "name": "Transition 6",  // <-- CHANGED FROM "Transition 4" TO "Transition 6"
+      "name": "Transition Point", 
       "levels": [
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
         { "tileSize": 512, "size": 512 }
@@ -278,7 +278,7 @@ var APP_DATA = {
     },
     {
       "id": "11-nexus",
-      "name": "Nexus",
+      "name": "Station 7",
       "levels": [
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
         { "tileSize": 512, "size": 512 }
