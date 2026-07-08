@@ -1,617 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>LITES | RP COI-SCM</title>
-<meta charset="utf-8">
-<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-<style> @-ms-viewport { width: device-width; } </style>
-<link rel="stylesheet" href="vendor/reset.min.css">
-<link rel="stylesheet" href="style.css">
-
-<style>
-  /* Top Progress Bar Styling */
-  #progress-bar-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.2);
-    z-index: 2000;
-  }
-  #progress-bar {
-    width: 0%;
-    height: 100%;
-    background: #33ff33;
-    box-shadow: 0 0 8px #33ff33;
-    transition: width 0.4s ease;
-  }
-
-  /* Floorplan Container Styling */
-  #floorplan-container {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    width: 360px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    background: rgba(0, 0, 0, 0.6);
-    padding: 5px;
-    border-radius: 8px;
-    border: 2px solid #fff;
-  }
-
-  #floorplan-img {
-    width: 100%;
-    display: block;
-    border-radius: 4px;
-  }
-
-  .map-dot {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background-color: #ff3333;
-    border: 2px solid white;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-    transform: translate(-50%, -50%); 
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    z-index: 1010;
-  }
-
-  .map-dot:hover {
-    background-color: #33ff33;
-    transform: translate(-50%, -50%) scale(1.3);
-  }
-
-  /* ========================================== */
-  /* WELCOME OVERLAY, LOGOS & PHOTO STYLING     */
-  /* ========================================== */
-  #welcome-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999999; 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    color: #ffffff;
-    font-family: system-ui, -apple-system, sans-serif;
-    box-sizing: border-box;
-    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1;
-    overflow-y: auto;
-  }
-
-  .photo-background-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('img/RP COI background.png'); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -2;
-  }
-
-  .video-overlay-tint {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(30, 27, 75, 0.50) 0%, rgba(15, 23, 42, 0.70) 100%);
-    z-index: -1;
-  }
-
-  .overlay-header {
-    width: 100%;
-    max-width: 100%;
-    padding: 24px 32px;
-    display: flex;
-    justify-content: flex-end; 
-    align-items: center;
-    gap: 20px; 
-    box-sizing: border-box;
-  }
-
-  .logo-img {
-    height: 45px; 
-    width: auto;
-    object-fit: contain;
-  }
-
-  .overlay-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px 16px;
-    width: 100%;
-    max-width: 520px;
-    box-sizing: border-box;
-    z-index: 10;
-  }
-
-  .premium-fade-in {
-    opacity: 0;
-    animation: premiumFadeIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    animation-delay: 0.1s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  @keyframes premiumFadeIn {
-    to { opacity: 1; }
-  }
-
-  .title-wrapper {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    margin: 0 0 8px 0;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  }
-
-  .typewriter-text {
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid transparent; 
-    width: 0;
-    color: #ffffff;
-    animation: 
-      typing 2.2s steps(22, end) forwards,
-      blinkCursor 0.6s step-end 4 alternate; 
-    animation-delay: 0.8s; 
-  }
-
-  @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-  }
-
-  @keyframes blinkCursor {
-    from, to { border-color: transparent; }
-    50% { border-color: #4ade80; }
-  }
-
-  @media (max-width: 768px) {
-    .title-wrapper { font-size: 2.2rem; }
-    .logo-img { height: 35px; }
-    .overlay-header { padding: 16px; gap: 12px; }
-  }
-
-  .overlay-subtitle {
-    font-size: 1.15rem;
-    color: #4ade80; 
-    font-weight: 600;
-    margin: 0 0 24px 0;
-    line-height: 1.4;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .registration-form {
-    width: 100%;
-    background: rgba(24, 24, 27, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 28px;
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-    text-align: left;
-    box-sizing: border-box;
-    margin-bottom: 24px;
-  }
-
-  .form-group {
-    margin-bottom: 18px;
-  }
-
-  .form-group:last-of-type {
-    margin-bottom: 0;
-  }
-
-  .form-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #e4e4e7;
-    margin-bottom: 6px;
-  }
-
-  .form-input {
-    width: 100%;
-    padding: 12px 14px;
-    background: rgba(39, 39, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 1rem;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-  }
-
-  .form-input:focus {
-    outline: none;
-    border-color: #4ade80;
-    background: rgba(39, 39, 42, 0.95);
-    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
-  }
-
-  .enter-tour-btn {
-    width: 100%;
-    padding: 14px;
-    background: #16a34a; 
-    color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 0.025em;
-    box-shadow: 0 10px 20px -5px rgba(22, 163, 74, 0.3);
-    transition: all 0.2s ease;
-    margin-top: 8px;
-  }
-
-  .enter-tour-btn:hover {
-    background: #22c55e; 
-    transform: translateY(-1px);
-    box-shadow: 0 12px 25px -5px rgba(34, 197, 94, 0.4);
-  }
-
-  .overlay-footer {
-    width: 100%;
-    text-align: center;
-    padding: 24px;
-    font-size: 11px;
-    color: #a1a1aa;
-    letter-spacing: 0.05em;
-    box-sizing: border-box;
-    z-index: 10;
-  }
-
-  .fade-out {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  /* ========================================== */
-  /* NETWORKING MODAL & BOOTH STYLING RULES     */
-  /* ========================================== */
-  #networking-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999998;
-    background: rgba(10, 10, 11, 0.96);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: system-ui, -apple-system, sans-serif;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  .networking-container {
-    background: #18181b;
-    border: 1px solid rgba(255,255,255,0.1);
-    max-width: 650px;
-    width: 100%;
-    border-radius: 20px;
-    padding: 36px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-    text-align: center;
-  }
-
-  .networking-title {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin-bottom: 8px;
-  }
-
-  .networking-recommendation-tag {
-    background: rgba(74, 222, 128, 0.1);
-    border: 1px dashed #4ade80;
-    color: #4ade80;
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    margin: 18px 0 24px 0;
-    display: inline-block;
-  }
-
-  .booth-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .booth-btn {
-    background: #27272a;
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 16px 20px;
-    border-radius: 12px;
-    color: #ffffff;
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.2s ease;
-  }
-
-  .booth-btn:hover {
-    background: #3f3f46;
-    transform: translateX(4px);
-  }
-
-  .booth-arrow {
-    color: #a1a1aa;
-    font-size: 1.2rem;
-  }
-
-  @keyframes pulseGlow {
-    0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
-  }
-
-  .recommended-booth-highlight {
-    border: 2px solid #4ade80 !important;
-    animation: pulseGlow 2s infinite;
-  }
-
-  /* Floating Booth Navigation Circle Button Next to Chatbase */
-  #booth-shortcut-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 90px; /* Shifts it beautifully to the left of the typical Chatbase layout */
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #16a34a;
-    border: 2px solid #ffffff;
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.3);
-    color: #ffffff;
-    display: none; /* Initially Hidden */
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 999999;
-    transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.4s ease;
-    opacity: 0;
-  }
-
-  #booth-shortcut-btn:hover {
-    background-color: #22c55e;
-    transform: scale(1.08);
-  }
-</style>
-</head>
-<body class="multiple-scenes">
-
-<div id="welcome-overlay">
-    <div class="photo-background-container"></div>
-    <div class="video-overlay-tint"></div>
-
-    <div class="overlay-header">
-        <img src="img/rp-logo.png" alt="Republic Polytechnic" class="logo-img" onerror="this.style.display='none'; this.after('Republic Polytechnic')">
-        <img src="img/coi-scm-logo.png" alt="COI-SCM" class="logo-img" onerror="this.style.display='none'; this.after('COI-SCM')">
-    </div>
-
-    <div class="overlay-main">
-        <div class="premium-fade-in">
-            <div class="title-wrapper">
-                <span class="typewriter-text" id="dynamic-lites-title">Welcome to LITES</span>
-            </div>
-            <p class="overlay-subtitle">virtual supply chain lab tour registration</p>
-        </div>
-        
-        <form class="registration-form" onsubmit="handleFormSubmit(event)">
-            <div class="form-group">
-                <label class="form-label" for="guest-name">Participant Name</label>
-                <input type="text" id="guest-name" class="form-input" placeholder="e.g., John Tan" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label" for="guest-org">Organisation Name</label>
-                <input type="text" id="guest-org" class="form-input" placeholder="e.g., XYZ PTE. LTD." required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label" for="guest-designation">Designation</label>
-                <input type="text" id="guest-designation" class="form-input" placeholder="e.g., Co-Founder" required>
-            </div>
-            
-            <button type="submit" id="enter-btn" class="enter-tour-btn">
-                Submit & Enter Experience
-            </button>
-        </form>
-    </div>
-
-    <div class="overlay-footer">
-        &copy; <span id="footer-year"></span> Republic Polytechnic Centre of Innovation for Supply Chain Management. All rights reserved.
-    </div>
-</div>
-
-<div id="progress-bar-container">
-  <div id="progress-bar"></div>
-</div>
-
-<div id="pano"></div>
-
-<div id="floorplan-container">
-  <img src="img/floorplan.png" id="floorplan-img" alt="Lab Map">
-
-  <button class="map-dot" data-scene="0-go-to-station-1" style="top: 80%; left: 70%;" title="Go to Station 1"></button>
-  <button class="map-dot" data-scene="2-go-to-station-2" style="top: 80%; left: 55%;" title="Go to Station 2"></button>
-  <button class="map-dot" data-scene="4-go-to-station-3" style="top: 80%; left: 30%;" title="Go to Station 3"></button>
-  <button class="map-dot" data-scene="5-go-to-station-4" style="top: 80%; left: 15%;" title="Go to Station 4"></button>
-  <button class="map-dot" data-scene="6-go-to-station-5" style="top: 30%; left: 15%;" title="Go to Station 5"></button>
-  <button class="map-dot" data-scene="8-go-to-station-6" style="top: 30%; left: 55%;" title="Go to Station 6"></button>
-  <button class="map-dot" data-scene="11-nexus" style="top: 30%; left: 80%;" title="Go to Station 7"></button>
-</div>
-
-<div id="sceneList">
-  <ul class="scenes">
-    <a href="javascript:void(0)" class="scene" data-id="0-go-to-station-1"><li class="text">Station 1</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="1-"><li class="text">Transition Point</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="2-go-to-station-2"><li class="text">Station 2</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="3-"><li class="text">Transition Point</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="4-go-to-station-3"><li class="text">Station 3</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="5-go-to-station-4"><li class="text">Station 4</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="6-go-to-station-5"><li class="text">Station 5</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="7-"><li class="text">Transition Point</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="8-go-to-station-6"><li class="text">Station 6</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="9-6-7"><li class="text">Transition Point</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="10-"><li class="text">Transition Point</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="11-nexus"><li class="text">Station 7</li></a>
-  </ul>
-</div>
-
-<div id="titleBar">
-  <h1 class="sceneName"></h1>
-</div>
-
-<a href="javascript:void(0)" id="autorotateToggle">
-  <img class="icon off" src="img/play.png">
-  <img class="icon on" src="img/pause.png">
-</a>
-
-<a href="javascript:void(0)" id="fullscreenToggle">
-  <img class="icon off" src="img/fullscreen.png">
-  <img class="icon on" src="img/windowed.png">
-</a>
-
-<a href="javascript:void(0)" id="sceneListToggle">
-  <img class="icon off" src="img/expand.png">
-  <img class="icon on" src="img/collapse.png">
-</a>
-
-<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1"><img class="icon" src="img/up.png"></a>
-<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2"><img class="icon" src="img/down.png"></a>
-<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3"><img class="icon" src="img/left.png"></a>
-<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4"><img class="icon" src="img/right.png"></a>
-<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5"><img class="icon" src="img/plus.png"></a>
-<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6"><img class="icon" src="img/minus.png"></a>
-
-<button id="booth-shortcut-btn" onclick="openBoothsModal()" title="Go to Booths Lounge">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-</button>
-
-<script src="vendor/screenfull.min.js" ></script>
-<script src="vendor/bowser.min.js" ></script>
-<script src="vendor/marzipano.js" ></script>
-
-<script src="data.js"></script>
-<script src="index.js"></script>
-
 <script>
-(function(){
-  if(!window.chatbase||window.chatbase("getState")!=="initialized"){
-    window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};
-    window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})
-  }
-  const onLoad=function(){
-    const script=document.createElement("script");
-    script.src="https://www.chatbase.co/embed.min.js";
-    script.id="A-Wbdgljl8KNv2ve0I9YW";
-    script.domain="www.chatbase.co";
-    
-    // Automatically hide Chatbase once it finishes executing/rendering on the DOM
-    script.onload = function() {
-      if (window.chatbase) {
-        window.chatbase("hide");
-      }
-    };
-    
-    document.body.appendChild(script)
-  };
-  if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}
-})();
-</script>
-  
-<div id="video-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 99999; justify-content: center; align-items: center; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-  <div style="position: relative; width: 90%; max-width: 900px; background-color: #000000; box-shadow: 0px 15px 40px rgba(0,0,0,0.8); overflow: hidden; border: 1px solid #333;">
-    <span id="close-modal" style="position: absolute; top: 15px; right: 20px; color: #ffffff; font-size: 32px; cursor: pointer; font-weight: 300; z-index: 100000; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">&times;</span>
-    <div style="padding: 25px 50px 20px 25px; color: #ffffff; background-color: #111111; border-bottom: 1px solid #222;">
-      <h2 style="margin: 0 0 10px 0; font-size: 22px; font-weight: bold; letter-spacing: 0.5px; color: #ffffff;">Loading Station Title...</h2>
-      <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #cccccc; font-weight: 300;">Loading Station Data...</p>
-    </div>
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; background-color: #000000;">
-      <iframe id="youtube-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-  </div>
-</div>
-
-<div id="networking-overlay" style="display: none;">
-  <div class="networking-container">
-    <h2 class="networking-title">Tour Complete! 🤝</h2>
-    <p style="color: #a1a1aa; font-size: 1.05rem; line-height: 1.5;">You've successfully explored all learning stations. Welcome to the interactive networking lounge.</p>
-    
-    <div class="networking-recommendation-tag" id="profile-recommendation-box">Calculating recommended pathways...</div>
-
-    <div class="booth-grid">
-      <button class="booth-btn" id="booth-logistics" onclick="selectNetworkingBooth('2-go-to-station-2')">
-        <span>Activation Zone A: Intralogistics & Warehouse Automation</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" id="booth-procurement" onclick="selectNetworkingBooth('4-go-to-station-3')">
-        <span>Activation Zone B: Digital Procurement & Sustainable Sourcing</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" id="booth-management" onclick="selectNetworkingBooth('0-go-to-station-1')">
-        <span>Activation Zone C: Supply Chain Risk Management Operations</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" id="booth-nexus" onclick="selectNetworkingBooth('11-nexus')">
-        <span>Activation Zone D: Executive Innovation Strategy Nexus</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-      <button class="booth-btn" onclick="selectNetworkingBooth('6-go-to-station-5')">
-        <span>Activation Zone E: Open Networking & Partner Showcase Lounge</span>
-        <span class="booth-arrow">&rarr;</span>
-      </button>
-    </div>
-    <p style="font-size: 12px; color: #71717a;">Select a zone layout above to instantly enter and consult with industry expert teams.</p>
-  </div>
-</div>
-
-<script>
-  // Keyword fragment setup to robustly intercept scene variations
-  const standardStations = ['station-1', 'station-2', 'station-3', 'station-4', 'station-5', 'station-6', 'nexus'];
+  // Track using the actual IDs present in your HTML side menu
+  const standardStations = [
+    '0-go-to-station-1', 
+    '2-go-to-station-2', 
+    '4-go-to-station-3', 
+    '5-go-to-station-4', 
+    '6-go-to-station-5', 
+    '8-go-to-station-6', 
+    '11-nexus'
+  ];
   let visitedStations = new Set();
+  let tourCompletedTriggered = false;
 
   document.addEventListener("DOMContentLoaded", function() {
       const currentYear = new Date().getFullYear();
       document.getElementById('dynamic-lites-title').innerText = "Welcome to LITES " + currentYear;
       document.getElementById('footer-year').innerText = currentYear;
       
-      // Setup dynamic tracking loops matching Marzipano framework state lifecycle
-      initializeMarzipanoTracker();
+      // Start tracking using the structural DOM elements instead of the framework window object
+      initializeDOMTracker();
   });
 
   /* Form Submission Handler */
@@ -629,7 +36,6 @@
       const overlay = document.getElementById('welcome-overlay');
       overlay.classList.add('fade-out');
       
-      // Reveal the chatbot widget when the application workspace initializes
       if (window.chatbase) {
           window.chatbase("show");
       }
@@ -639,39 +45,51 @@
       }, 600);
   }
 
-  // Uses state pooling instead of direct DOM elements hooks to prevent timing locks
-  function initializeMarzipanoTracker() {
+  /* BULLETPROOF FIXED TRACKER:
+    Loops through the side menu directly. Marzipano adds an 'active' class to the link 
+    or list item when a scene changes. If it finds the active scene, it logs it.
+  */
+  function initializeDOMTracker() {
       setInterval(() => {
-          if (typeof APP !== 'undefined' && APP.currentScene) {
-              trackStationVisit(APP.currentScene.data.id);
-          } else if (typeof viewer !== 'undefined' && viewer.scene()) {
-              trackStationVisit(viewer.scene().data.id);
-          }
-      }, 300);
+          // Find all elements in your side menu list
+          const sceneElements = document.querySelectorAll('#sceneList .scene');
+          
+          sceneElements.forEach(elem => {
+              // Check if Marzipano has marked this specific scene as active
+              if (elem.classList.contains('active') || elem.parentElement.classList.contains('active')) {
+                  const sceneId = elem.getAttribute('data-id');
+                  if (standardStations.includes(sceneId)) {
+                      registerStation(sceneId);
+                  }
+              }
+          });
+      }, 500); // Check every half second
   }
 
-  function trackStationVisit(sceneId) {
-      if (!sceneId) return;
-
-      const lowerSceneId = sceneId.toLowerCase();
-
-      // Loop over our targeted keywords rather than expecting strict ID match parity
-      standardStations.forEach(stationKeyword => {
-          if (lowerSceneId.includes(stationKeyword) && !visitedStations.has(stationKeyword)) {
-              visitedStations.add(stationKeyword);
-              
-              // Dynamically compute progress value
-              const progressPercentage = (visitedStations.size / standardStations.length) * 100;
-              const pb = document.getElementById('progress-bar');
-              if (pb) pb.style.width = progressPercentage + '%';
-
-              if (visitedStations.size === standardStations.length) {
-                  setTimeout(() => {
-                      triggerNetworkingPhaseOverlay();
-                  }, 1000); 
-              }
+  function registerStation(sceneId) {
+      if (!visitedStations.has(sceneId)) {
+          visitedStations.add(sceneId);
+          
+          // Force calculation based on elements registered
+          const progressPercentage = (visitedStations.size / standardStations.length) * 100;
+          const pb = document.getElementById('progress-bar');
+          if (pb) {
+              pb.style.width = progressPercentage + '%';
           }
-      });
+      }
+
+      // EMERGENCY OVERRIDE TRIPPED: 
+      // If the progress bar element in your screenshot is visually full (width 100%),
+      // or our script successfully verified all 7 stations, force the popup to show!
+      const progressBarElement = document.getElementById('progress-bar');
+      const visualWidth = progressBarElement ? progressBarElement.style.width : '';
+      
+      if ((visitedStations.size >= standardStations.length || visualWidth === '100%') && !tourCompletedTriggered) {
+          tourCompletedTriggered = true;
+          setTimeout(() => {
+              triggerNetworkingPhaseOverlay();
+          }, 500);
+      }
   }
 
   function triggerNetworkingPhaseOverlay() {
@@ -693,17 +111,22 @@
           recommendationLabel = 'Executive Innovation Strategy Nexus';
       }
 
-      recTag.innerHTML = `👋 Hi <strong>${name}</strong>, based on your industry profile, we highly recommend starting at <strong>${recommendationLabel}</strong>!`;
+      if (recTag) {
+          recTag.innerHTML = `👋 Hi <strong>${name}</strong>, based on your industry profile, we highly recommend starting at <strong>${recommendationLabel}</strong>!`;
+      }
       
       const targetBtn = document.getElementById(targetedButtonId);
       if (targetBtn) {
           targetBtn.classList.add('recommended-booth-highlight');
       }
 
-      // Display the modal automatically when completed
-      document.getElementById('networking-overlay').style.display = 'flex';
+      // Unhide the completed layout modal frame
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) {
+          netOverlay.style.display = 'flex';
+      }
 
-      // Simultaneously unlock and reveal the permanent shortcut button right next to the chatbot
+      // Display shortcut circle icon next to chat bot
       const dynamicBoothShortcut = document.getElementById('booth-shortcut-btn');
       if (dynamicBoothShortcut) {
           dynamicBoothShortcut.style.display = 'flex';
@@ -713,13 +136,15 @@
       }
   }
 
-  /* Explicit function called by our circle button to return to the 5 booth view */
   function openBoothsModal() {
-      document.getElementById('networking-overlay').style.display = 'flex';
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'flex';
   }
 
   function selectNetworkingBooth(sceneId) {
-      document.getElementById('networking-overlay').style.display = 'none';
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'none';
+      
       if (typeof switchScene === "function") {
           switchScene(sceneId);
       } else {
@@ -728,5 +153,3 @@
       }
   }
 </script>
-</body>
-</html>
