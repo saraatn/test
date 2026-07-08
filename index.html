@@ -601,7 +601,8 @@
 </div>
 
 <script>
-  const standardStations = ['0-go-to-station-1', '2-go-to-station-2', '4-go-to-station-3', '5-go-to-station-4', '6-go-to-station-5', '8-go-to-station-6', '11-nexus'];
+  // Keyword fragment setup to robustly intercept scene variations
+  const standardStations = ['station-1', 'station-2', 'station-3', 'station-4', 'station-5', 'station-6', 'nexus'];
   let visitedStations = new Set();
 
   document.addEventListener("DOMContentLoaded", function() {
@@ -650,20 +651,27 @@
   }
 
   function trackStationVisit(sceneId) {
-      if (standardStations.includes(sceneId) && !visitedStations.has(sceneId)) {
-          visitedStations.add(sceneId);
-          
-          // Dynamically compute progress value
-          const progressPercentage = (visitedStations.size / standardStations.length) * 100;
-          const pb = document.getElementById('progress-bar');
-          if (pb) pb.style.width = progressPercentage + '%';
+      if (!sceneId) return;
 
-          if (visitedStations.size === standardStations.length) {
-              setTimeout(() => {
-                  triggerNetworkingPhaseOverlay();
-              }, 1000); 
+      const lowerSceneId = sceneId.toLowerCase();
+
+      // Loop over our targeted keywords rather than expecting strict ID match parity
+      standardStations.forEach(stationKeyword => {
+          if (lowerSceneId.includes(stationKeyword) && !visitedStations.has(stationKeyword)) {
+              visitedStations.add(stationKeyword);
+              
+              // Dynamically compute progress value
+              const progressPercentage = (visitedStations.size / standardStations.length) * 100;
+              const pb = document.getElementById('progress-bar');
+              if (pb) pb.style.width = progressPercentage + '%';
+
+              if (visitedStations.size === standardStations.length) {
+                  setTimeout(() => {
+                      triggerNetworkingPhaseOverlay();
+                  }, 1000); 
+              }
           }
-      }
+      });
   }
 
   function triggerNetworkingPhaseOverlay() {
