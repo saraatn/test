@@ -383,6 +383,32 @@
     border: 2px solid #4ade80 !important;
     animation: pulseGlow 2s infinite;
   }
+
+  /* Floating Booth Navigation Circle Button Next to Chatbase */
+  #booth-shortcut-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 90px; /* Shifts it beautifully to the left of the typical Chatbase layout */
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #16a34a;
+    border: 2px solid #ffffff;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    display: none; /* Initially Hidden */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 999999;
+    transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.4s ease;
+    opacity: 0;
+  }
+
+  #booth-shortcut-btn:hover {
+    background-color: #22c55e;
+    transform: scale(1.08);
+  }
 </style>
 </head>
 <body class="multiple-scenes">
@@ -492,6 +518,10 @@
 <a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5"><img class="icon" src="img/plus.png"></a>
 <a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6"><img class="icon" src="img/minus.png"></a>
 
+<button id="booth-shortcut-btn" onclick="openBoothsModal()" title="Go to Booths Lounge">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+</button>
+
 <script src="vendor/screenfull.min.js" ></script>
 <script src="vendor/bowser.min.js" ></script>
 <script src="vendor/marzipano.js" ></script>
@@ -583,7 +613,7 @@
       initializeMarzipanoTracker();
   });
 
-  /* Amended Form Submission Handler -> Triggers Chatbase Show Functionality */
+  /* Form Submission Handler */
   function handleFormSubmit(event) {
       event.preventDefault(); 
       
@@ -623,6 +653,11 @@
       if (standardStations.includes(sceneId) && !visitedStations.has(sceneId)) {
           visitedStations.add(sceneId);
           
+          // Dynamically compute progress value
+          const progressPercentage = (visitedStations.size / standardStations.length) * 100;
+          const pb = document.getElementById('progress-bar');
+          if (pb) pb.style.width = progressPercentage + '%';
+
           if (visitedStations.size === standardStations.length) {
               setTimeout(() => {
                   triggerNetworkingPhaseOverlay();
@@ -657,6 +692,21 @@
           targetBtn.classList.add('recommended-booth-highlight');
       }
 
+      // Display the modal automatically when completed
+      document.getElementById('networking-overlay').style.display = 'flex';
+
+      // Simultaneously unlock and reveal the permanent shortcut button right next to the chatbot
+      const dynamicBoothShortcut = document.getElementById('booth-shortcut-btn');
+      if (dynamicBoothShortcut) {
+          dynamicBoothShortcut.style.display = 'flex';
+          setTimeout(() => {
+              dynamicBoothShortcut.style.opacity = '1';
+          }, 50);
+      }
+  }
+
+  /* Explicit function called by our circle button to return to the 5 booth view */
+  function openBoothsModal() {
       document.getElementById('networking-overlay').style.display = 'flex';
   }
 
