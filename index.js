@@ -72,6 +72,10 @@
   };
 
   // Initialize viewer.
+  if (!panoElement) {
+    console.error("Critical Error: #pano element not found in HTML!");
+    return;
+  }
   var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
 
   // Create scenes.
@@ -117,15 +121,17 @@
     targetPitch: 0,
     targetFov: Math.PI/2
   });
-  if (data.settings.autorotateEnabled) {
+  if (data.settings.autorotateEnabled && autorotateToggleElement) {
     autorotateToggleElement.classList.add('enabled');
   }
 
   // Set handler for autorotate toggle.
-  autorotateToggleElement.addEventListener('click', toggleAutorotate);
+  if (autorotateToggleElement) {
+    autorotateToggleElement.addEventListener('click', toggleAutorotate);
+  }
 
   // Set up fullscreen mode, if supported.
-  if (screenfull.enabled && data.settings.fullscreenButton) {
+  if (screenfull.enabled && data.settings.fullscreenButton && fullscreenToggleElement) {
     document.body.classList.add('fullscreen-enabled');
     fullscreenToggleElement.addEventListener('click', function() {
       screenfull.toggle();
@@ -142,7 +148,9 @@
   }
 
   // Set handler for scene list toggle.
-  sceneListToggleElement.addEventListener('click', toggleSceneList);
+  if (sceneListToggleElement) {
+    sceneListToggleElement.addEventListener('click', toggleSceneList);
+  }
 
   // Start with the scene list open on desktop.
   if (!document.body.classList.contains('mobile')) {
@@ -166,21 +174,23 @@
   // 2D FLOOR PLAN MAP INTERACTION LOOP
   // ==========================================================================
   const mapDots = document.querySelectorAll('.map-dot');
-  mapDots.forEach(function(dot) {
-    dot.addEventListener('click', function() {
-      const targetSceneId = this.getAttribute('data-scene');
-      
-      const targetScene = scenes.find(function(s) {
-        return s.data.id === targetSceneId;
+  if (mapDots) {
+    mapDots.forEach(function(dot) {
+      dot.addEventListener('click', function() {
+        const targetSceneId = this.getAttribute('data-scene');
+        
+        const targetScene = scenes.find(function(s) {
+          return s.data.id === targetSceneId;
+        });
+        
+        if (targetScene) {
+          switchScene(targetScene);
+        } else {
+          console.warn("Scene ID tracking mismatch: " + targetSceneId);
+        }
       });
-      
-      if (targetScene) {
-        switchScene(targetScene);
-      } else {
-        console.warn("Scene ID tracking mismatch: " + targetSceneId);
-      }
     });
-  });
+  }
 
   // DOM elements for view controls.
   var viewUpElement = document.querySelector('#viewUp');
@@ -196,12 +206,12 @@
 
   // Associate view controls with elements.
   var controls = viewer.controls();
-  controls.registerMethod('upElement',    new Marzipano.ElementPressControlMethod(viewUpElement,     'y', -velocity, friction), true);
-  controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
-  controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
-  controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
-  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,   'zoom', -velocity, friction), true);
-  controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement, 'zoom',  velocity, friction), true);
+  if (viewUpElement) controls.registerMethod('upElement',    new Marzipano.ElementPressControlMethod(viewUpElement,     'y', -velocity, friction), true);
+  if (viewDownElement) controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
+  if (viewLeftElement) controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
+  if (viewRightElement) controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
+  if (viewInElement) controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,   'zoom', -velocity, friction), true);
+  if (viewOutElement) controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement, 'zoom',  velocity, friction), true);
 
   function sanitize(s) {
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
@@ -224,12 +234,359 @@
   }
 
   function updateSceneList(scene) {
-    for (var i = 0; i < sceneElements.length; i++) {
-      var el = sceneElements[i];
-      if (el.getAttribute('data-id') === scene.data.id) {
-        el.classList.add('current');
+    if (sceneElements) {
+      for (var i = 0; i < sceneElements.length; i++) {
+        var el = sceneElements[i];
+        if (el.getAttribute('data-id') === scene.data.id) {
+          el.classList.add('current');
+        } else {
+          el.classList.remove('current');
+        }
+      }
+    }
+  }
+
+  function updateProgressBar(scene) {
+    if (progressBar) {
+      visitedScenes.add(scene.data.id);
+      var percentage = (visitedScenes.size / scenes.length) * 100;
+      progressBar.style.width = percentage + '%';
+    }
+  }
+
+  var sceneListToggleElement = document.querySelector('#sceneListToggle');
+  var autorotateToggleElement = document.querySelector('#autorotateToggle');
+  var fullscreenToggleElement = document.querySelector('#fullscreenToggle');
+
+  // Detect desktop or mobile mode.
+  if (window.matchMedia) {
+    var setMode = function() {
+      if (mql.matches) {
+        document.body.classList.remove('desktop');
+        document.body.classList.add('mobile');
       } else {
-        el.classList.remove('current');
+        document.body.classList.remove('mobile');
+        document.body.classList.add('desktop');
+      }
+    };
+    var mql = matchMedia("(max-width: 500px), (max-height: 500px)");
+    setMode();
+    mql.addListener(setMode);
+  } else {
+    document.body.classList.add('desktop');
+  }
+
+  // Detect whether we are on a touch device.
+  document.body.classList.add('no-touch');
+  window.addEventListener('touchstart', function() {
+    document.body.classList.remove('no-touch');
+    document.body.classList.add('touch');
+  });
+
+  // Use tooltip fallback mode on IE < 11.
+  if (bowser.msie && parseFloat(bowser.version) < 11) {
+    document.body.classList.add('tooltip-fallback');
+  }
+
+  // Viewer options.
+  var viewerOpts = {
+    controls: {
+      mouseViewMode: data.settings.mouseViewMode
+    }
+  };
+
+  // Initialize viewer.
+  if (!panoElement) {
+    console.error("Critical Error: #pano element not found in HTML!");
+    return;
+  }
+  var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
+
+  // Create scenes.
+  var scenes = data.scenes.map(function(data) {
+    var urlPrefix = "tiles";
+    var source = Marzipano.ImageUrlSource.fromString(
+      urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
+      { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" });
+    var geometry = new Marzipano.CubeGeometry(data.levels);
+
+    var limiter = Marzipano.RectilinearView.limit.traditional(data.faceSize, 100*Math.PI/180, 120*Math.PI/180);
+    var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
+
+    var scene = viewer.createScene({
+      source: source,
+      geometry: geometry,
+      view: view,
+      pinFirstLevel: true
+    });
+
+    // Create link hotspots.
+    data.linkHotspots.forEach(function(hotspot) {
+      var element = createLinkHotspotElement(hotspot);
+      scene.hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
+    });
+
+    // Create info hotspots.
+    data.infoHotspots.forEach(function(hotspot) {
+      var element = createInfoHotspotElement(hotspot);
+      scene.hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
+    });
+
+    return {
+      data: data,
+      scene: scene,
+      view: view
+    };
+  });
+
+  // Set up autorotate, if enabled.
+  var autorotate = Marzipano.autorotate({
+    yawSpeed: 0.03,
+    targetPitch: 0,
+    targetFov: Math.PI/2
+  });
+  if (data.settings.autorotateEnabled && autorotateToggleElement) {
+    autorotateToggleElement.classList.add('enabled');
+  }
+
+  // Set handler for autorotate toggle.
+  if (autorotateToggleElement) {
+    autorotateToggleElement.addEventListener('click', toggleAutorotate);
+  }
+
+  // Set up fullscreen mode, if supported.
+  if (screenfull.enabled && data.settings.fullscreenButton && fullscreenToggleElement) {
+    document.body.classList.add('fullscreen-enabled');
+    fullscreenToggleElement.addEventListener('click', function() {
+      screenfull.toggle();
+    });
+    screenfull.on('change', function() {
+      if (screenfull.isFullscreen) {
+        fullscreenToggleElement.classList.add('enabled');
+      } else {
+        fullscreenToggleElement.classList.remove('enabled');
+      }
+    });
+  } else {
+    document.body.classList.add('fullscreen-disabled');
+  }
+
+  // Set handler for scene list toggle.
+  if (sceneListToggleElement) {
+    sceneListToggleElement.addEventListener('click', toggleSceneList);
+  }
+
+  // Start with the scene list open on desktop.
+  if (!document.body.classList.contains('mobile')) {
+    showSceneList();
+  }
+
+  // Set handler for scene switch.
+  scenes.forEach(function(scene) {
+    var el = document.querySelector('#sceneList .scene[data-id="' + scene.data.id + '"]');
+    if (el) {
+      el.addEventListener('click', function() {
+        switchScene(scene);
+        if (document.body.classList.contains('mobile')) {
+          hideSceneList();
+        }
+      });
+    }
+  });
+
+  // ==========================================================================
+  // 2D FLOOR PLAN MAP INTERACTION LOOP
+  // ==========================================================================
+  const mapDots = document.querySelectorAll('.map-dot');
+  if (mapDots) {
+    mapDots.forEach(function(dot) {
+      dot.addEventListener('click', function() {
+        const targetSceneId = this.getAttribute('data-scene');
+        
+        const targetScene = scenes.find(function(s) {
+          return s.data.id === targetSceneId;
+        });
+        
+        if (targetScene) {
+          switchScene(targetScene);
+        } else {
+          console.warn("Scene ID tracking mismatch: " + targetSceneId);
+        }
+      });
+    });
+  }
+
+  // DOM elements for view controls.
+  var viewUpElement = document.querySelector('#viewUp');
+  var viewDownElement = document.querySelector('#viewDown');
+  var viewLeftElement = document.querySelector('#viewLeft');
+  var viewRightElement = document.querySelector('#viewRight');
+  var viewInElement = document.querySelector('#viewIn');
+  var viewOutElement = document.querySelector('#viewOut');
+
+  // Dynamic parameters for controls.
+  var velocity = 0.7;
+  var friction = 3;
+
+  // Associate view controls with elements.
+  var controls = viewer.controls();
+  if (viewUpElement) controls.registerMethod('upElement',    new Marzipano.ElementPressControlMethod(viewUpElement,     'y', -velocity, friction), true);
+  if (viewDownElement) controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
+  if (viewLeftElement) controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
+  if (viewRightElement) controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
+  if (viewInElement) controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,   'zoom', -velocity, friction), true);
+  if (viewOutElement) controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement, 'zoom',  velocity, friction), true);
+
+  function sanitize(s) {
+    return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+  }
+
+  function switchScene(scene) {
+    stopAutorotate();
+    scene.view.setParameters(scene.data.initialViewParameters);
+    scene.scene.switchTo();
+    startAutorotate();
+    updateSceneName(scene);
+    updateSceneList(scene);
+    updateProgressBar(scene);
+  }
+
+  function updateSceneName(scene) {
+    if (sceneNameElement) {
+      sceneNameElement.innerHTML = sanitize(scene.data.name || "Transition Point");
+    }
+  }
+
+  function updateSceneList(scene) {
+    if (sceneElements) {
+      for (var i = 0; i < sceneElements.length; i++) {
+        var el = sceneElements[i];
+        if (el.getAttribute('data-id') === scene.data.id) {
+          el.classList.add('current');
+        } else {
+          el.classList.remove('current');
+        }
+      }
+    }
+  }
+
+  function updateProgressBar(scene) {
+    if (progressBar) {
+      visitedScenes.add(scene.data.id);
+      var percentage = (visitedScenes.size / scenes.length) * 100;
+      progressBar.style.width = percentage + '%';
+    }
+  }
+
+  function showSceneList() {
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.add('enabled');
+      sceneListToggleElement.classList.add('enabled');
+    }
+  }
+
+  function hideSceneList() {
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.remove('enabled');
+      sceneListToggleElement.classList.remove('enabled');
+    }
+  }
+
+  // Set handler for scene list toggle.
+  if (sceneListToggleElement) {
+    sceneListToggleElement.addEventListener('click', toggleSceneList);
+  }
+
+  // Start with the scene list open on desktop.
+  if (!document.body.classList.contains('mobile')) {
+    showSceneList();
+  }
+
+  // Set handler for scene switch.
+  scenes.forEach(function(scene) {
+    var el = document.querySelector('#sceneList .scene[data-id="' + scene.data.id + '"]');
+    if (el) {
+      el.addEventListener('click', function() {
+        switchScene(scene);
+        if (document.body.classList.contains('mobile')) {
+          hideSceneList();
+        }
+      });
+    }
+  });
+
+  // ==========================================================================
+  // 2D FLOOR PLAN MAP INTERACTION LOOP
+  // ==========================================================================
+  const mapDots = document.querySelectorAll('.map-dot');
+  if (mapDots) {
+    mapDots.forEach(function(dot) {
+      dot.addEventListener('click', function() {
+        const targetSceneId = this.getAttribute('data-scene');
+        
+        const targetScene = scenes.find(function(s) {
+          return s.data.id === targetSceneId;
+        });
+        
+        if (targetScene) {
+          switchScene(targetScene);
+        } else {
+          console.warn("Scene ID tracking mismatch: " + targetSceneId);
+        }
+      });
+    });
+  }
+
+  // DOM elements for view controls.
+  var viewUpElement = document.querySelector('#viewUp');
+  var viewDownElement = document.querySelector('#viewDown');
+  var viewLeftElement = document.querySelector('#viewLeft');
+  var viewRightElement = document.querySelector('#viewRight');
+  var viewInElement = document.querySelector('#viewIn');
+  var viewOutElement = document.querySelector('#viewOut');
+
+  // Dynamic parameters for controls.
+  var velocity = 0.7;
+  var friction = 3;
+
+  // Associate view controls with elements.
+  var controls = viewer.controls();
+  if (viewUpElement) controls.registerMethod('upElement',    new Marzipano.ElementPressControlMethod(viewUpElement,     'y', -velocity, friction), true);
+  if (viewDownElement) controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
+  if (viewLeftElement) controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
+  if (viewRightElement) controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
+  if (viewInElement) controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,   'zoom', -velocity, friction), true);
+  if (viewOutElement) controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement, 'zoom',  velocity, friction), true);
+
+  function sanitize(s) {
+    return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+  }
+
+  function switchScene(scene) {
+    stopAutorotate();
+    scene.view.setParameters(scene.data.initialViewParameters);
+    scene.scene.switchTo();
+    startAutorotate();
+    updateSceneName(scene);
+    updateSceneList(scene);
+    updateProgressBar(scene);
+  }
+
+  function updateSceneName(scene) {
+    if (sceneNameElement) {
+      sceneNameElement.innerHTML = sanitize(scene.data.name || "Transition Point");
+    }
+  }
+
+  function updateSceneList(scene) {
+    if (sceneElements) {
+      for (var i = 0; i < sceneElements.length; i++) {
+        var el = sceneElements[i];
+        if (el.getAttribute('data-id') === scene.data.id) {
+          el.classList.add('current');
+        } else {
+          el.classList.remove('current');
+        }
       }
     }
   }
@@ -327,7 +684,6 @@
     var iconWrapper = document.createElement('div');
     iconWrapper.classList.add('info-hotspot-icon-wrapper');
     
-    // NATIVE HOVER TOOLTIP: Pulls dynamic station names out of your data arrays
     if (hotspot.title) {
       iconWrapper.setAttribute('title', hotspot.title);
     }
@@ -338,7 +694,6 @@
     iconWrapper.appendChild(icon);
     wrapper.appendChild(iconWrapper);
 
-    // DYNAMIC CLICK HANDLER: Injects data models and structures runtime closing hooks smoothly
     iconWrapper.addEventListener('click', function() {
       var modal = document.getElementById('video-modal');
       var modalTitle = document.querySelector('#video-modal h2');
@@ -347,31 +702,27 @@
       var closeBtn = document.getElementById('close-modal');
 
       if (modal) {
-        // Safely inject text values from data.js parameters
         if (modalTitle) modalTitle.innerHTML = hotspot.title || "Station Information";
         if (modalText) modalText.innerHTML = hotspot.text || "";
         
-        // Dynamic YouTube Video Injection
         if (modalIframe) {
           var videoId = hotspot.video || "dQw4w9WgXcQ"; 
           modalIframe.src = "https://www.youtube.com/embed/" + videoId + "?enablejsapi=1&autoplay=1";
         }
         
-        // Display the modal block layout container
         modal.style.display = 'flex';
 
-        // Explicitly link dynamic modal teardown triggers
         if (closeBtn) {
           closeBtn.onclick = function() {
             modal.style.display = 'none';
-            if (modalIframe) modalIframe.src = ''; // Instantly strips audio processing streams
+            if (modalIframe) modalIframe.src = '';
           };
         }
 
         modal.onclick = function(event) {
           if (event.target === modal) {
             modal.style.display = 'none';
-            if (modalIframe) modalIframe.src = ''; // Instantly strips audio processing streams
+            if (modalIframe) modalIframe.src = '';
           }
         };
       }
@@ -410,6 +761,8 @@
   }
 
   // Display the initial scene.
-  switchScene(scenes[0]);
+  if (scenes.length > 0) {
+    switchScene(scenes[0]);
+  }
 
 })();
