@@ -1,155 +1,101 @@
-<script>
-  // Track using the actual IDs present in your HTML side menu
-  const standardStations = [
-    '0-go-to-station-1', 
-    '2-go-to-station-2', 
-    '4-go-to-station-3', 
-    '5-go-to-station-4', 
-    '6-go-to-station-5', 
-    '8-go-to-station-6', 
-    '11-nexus'
-  ];
-  let visitedStations = new Set();
-  let tourCompletedTriggered = false;
-
-  document.addEventListener("DOMContentLoaded", function() {
-      const currentYear = new Date().getFullYear();
-      document.getElementById('dynamic-lites-title').innerText = "Welcome to LITES " + currentYear;
-      document.getElementById('footer-year').innerText = currentYear;
-      
-      // Start tracking using the structural DOM elements instead of the framework window object
-      initializeDOMTracker();
-  });
-
-  /* Form Submission Handler */
-  function handleFormSubmit(event) {
-      event.preventDefault(); 
-      
-      const participantName = document.getElementById('guest-name').value;
-      const organisationName = document.getElementById('guest-org').value;
-      const designation = document.getElementById('guest-designation').value;
-
-      localStorage.setItem('lites_guest_name', participantName);
-      localStorage.setItem('lites_guest_org', organisationName);
-      localStorage.setItem('lites_guest_title', designation);
-
-      const overlay = document.getElementById('welcome-overlay');
-      overlay.classList.add('fade-out');
-      
-      if (window.chatbase) {
-          window.chatbase("show");
-      }
-      
-      setTimeout(() => {
-          overlay.remove();
-      }, 600);
+<style>
+  /* Welcome Landing Page Overlay Layout Styling - Updated to PNG Asset */
+  #welcome-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #0f172a url('img/rp coi background.png') no-repeat center center;
+    background-size: cover;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: sans-serif;
+    transition: opacity 0.6s ease;
+  }
+  
+  #welcome-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.5); /* Ambient backdrop tint */
+    z-index: 1;
   }
 
-  /* BULLETPROOF FIXED TRACKER:
-    Loops through the side menu directly. Marzipano adds an 'active' class to the link 
-    or list item when a scene changes. If it finds the active scene, it logs it.
-  */
-  function initializeDOMTracker() {
-      setInterval(() => {
-          // Find all elements in your side menu list
-          const sceneElements = document.querySelectorAll('#sceneList .scene');
-          
-          sceneElements.forEach(elem => {
-              // Check if Marzipano has marked this specific scene as active
-              if (elem.classList.contains('active') || elem.parentElement.classList.contains('active')) {
-                  const sceneId = elem.getAttribute('data-id');
-                  if (standardStations.includes(sceneId)) {
-                      registerStation(sceneId);
-                  }
-              }
-          });
-      }, 500); // Check every half second
+  /* Translucent Form Card Frame (65% Opacity) */
+  .form-card {
+    position: relative;
+    z-index: 2;
+    background: rgba(30, 41, 59, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 35px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    text-align: center;
   }
 
-  function registerStation(sceneId) {
-      if (!visitedStations.has(sceneId)) {
-          visitedStations.add(sceneId);
-          
-          // Force calculation based on elements registered
-          const progressPercentage = (visitedStations.size / standardStations.length) * 100;
-          const pb = document.getElementById('progress-bar');
-          if (pb) {
-              pb.style.width = progressPercentage + '%';
-          }
-      }
-
-      // EMERGENCY OVERRIDE TRIPPED: 
-      // If the progress bar element in your screenshot is visually full (width 100%),
-      // or our script successfully verified all 7 stations, force the popup to show!
-      const progressBarElement = document.getElementById('progress-bar');
-      const visualWidth = progressBarElement ? progressBarElement.style.width : '';
-      
-      if ((visitedStations.size >= standardStations.length || visualWidth === '100%') && !tourCompletedTriggered) {
-          tourCompletedTriggered = true;
-          setTimeout(() => {
-              triggerNetworkingPhaseOverlay();
-          }, 500);
-      }
+  /* Typewriter Text Header Target Container */
+  .form-card h2 { 
+    margin-bottom: 25px; 
+    font-size: 24px; 
+    font-weight: 600; 
+    color: #fff;
+    min-height: 32px; 
+    display: inline-block;
+    border-right: 2px solid rgba(255,255,255,0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    animation: blink-caret 0.75s step-end infinite;
   }
 
-  function triggerNetworkingPhaseOverlay() {
-      const name = localStorage.getItem('lites_guest_name') || 'Guest';
-      const title = (localStorage.getItem('lites_guest_title') || '').toLowerCase();
-      
-      const recTag = document.getElementById('profile-recommendation-box');
-      let targetedButtonId = 'booth-management'; 
-      let recommendationLabel = 'Operations & Risk Control';
-
-      if (title.includes('logistics') || title.includes('warehouse') || title.includes('operation')) {
-          targetedButtonId = 'booth-logistics';
-          recommendationLabel = 'Intralogistics & Warehouse Automation';
-      } else if (title.includes('procurement') || title.includes('buyer') || title.includes('sourcing') || title.includes('supply chain')) {
-          targetedButtonId = 'booth-procurement';
-          recommendationLabel = 'Digital Procurement & Sustainable Sourcing';
-      } else if (title.includes('manager') || title.includes('founder') || title.includes('director') || title.includes('executive') || title.includes('ceo')) {
-          targetedButtonId = 'booth-nexus';
-          recommendationLabel = 'Executive Innovation Strategy Nexus';
-      }
-
-      if (recTag) {
-          recTag.innerHTML = `👋 Hi <strong>${name}</strong>, based on your industry profile, we highly recommend starting at <strong>${recommendationLabel}</strong>!`;
-      }
-      
-      const targetBtn = document.getElementById(targetedButtonId);
-      if (targetBtn) {
-          targetBtn.classList.add('recommended-booth-highlight');
-      }
-
-      // Unhide the completed layout modal frame
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) {
-          netOverlay.style.display = 'flex';
-      }
-
-      // Display shortcut circle icon next to chat bot
-      const dynamicBoothShortcut = document.getElementById('booth-shortcut-btn');
-      if (dynamicBoothShortcut) {
-          dynamicBoothShortcut.style.display = 'flex';
-          setTimeout(() => {
-              dynamicBoothShortcut.style.opacity = '1';
-          }, 50);
-      }
+  .form-group { margin-bottom: 20px; text-align: left; }
+  .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #cbd5e1; font-weight: 500; }
+  .form-group input {
+    width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #475569;
+    background: rgba(15, 23, 42, 0.6); color: #fff; box-sizing: border-box; font-size: 14px;
+    transition: border-color 0.2s;
   }
+  .form-group input:focus { outline: none; border-color: #008453; }
 
-  function openBoothsModal() {
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) netOverlay.style.display = 'flex';
+  /* Submit Button - Restored to Muted RP Corporate Green */
+  .submit-btn {
+    width: 100%; padding: 12px; 
+    background: #008453; /* Deep Muted RP Green */
+    border: none;
+    border-radius: 6px; color: #fff; font-weight: 600; cursor: pointer;
+    font-size: 15px; margin-top: 10px; transition: background 0.2s;
   }
+  .submit-btn:hover { background: #006b42; }
+  #welcome-overlay.fade-out { opacity: 0; pointer-events: none; }
 
-  function selectNetworkingBooth(sceneId) {
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) netOverlay.style.display = 'none';
-      
-      if (typeof switchScene === "function") {
-          switchScene(sceneId);
-      } else {
-          const alternativeTrigger = document.querySelector(`.scene[data-id="${sceneId}"]`);
-          if (alternativeTrigger) alternativeTrigger.click();
-      }
+  /* Keyframes for the typewriter cursor effect */
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: rgba(255,255,255,0.75); }
   }
-</script>
+</style>
+
+<div id="welcome-overlay">
+  <div class="form-card">
+    <h2 id="dynamic-lites-title"></h2>
+    <form onsubmit="handleFormSubmit(event)">
+      <div class="form-group">
+        <label for="guest-name">Full Name</label>
+        <input type="text" id="guest-name" required placeholder="John Doe">
+      </div>
+      <div class="form-group">
+        <label for="guest-org">Organisation</label>
+        <input type="text" id="guest-org" required placeholder="Company Name">
+      </div>
+      <div class="form-group">
+        <label for="guest-designation">Designation / Job Title</label>
+        <input type="text" id="guest-designation" required placeholder="Operations Manager">
+      </div>
+      <button type="submit" class="submit-btn">Welcome! Enter the experience</button>
+    </form>
+  </div>
+</div>
